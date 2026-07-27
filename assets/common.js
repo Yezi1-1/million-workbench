@@ -1,54 +1,115 @@
 // 百万搞钱工作台 - 共享脚本
 
-// 顶部导航配置
+// 侧边栏导航配置
 const NAV_ITEMS = [
-  { label: "总仪表盘", href: "index.html", icon: "📊" },
-  { label: "赛道规划", href: "tracks.html", icon: "🎯" },
-  { label: "财务记账", href: "finance.html", icon: "💰" },
-  { label: "客户CRM", href: "crm.html", icon: "👥" },
-  { label: "每日打卡", href: "daily.html", icon: "✅" },
-  { label: "月度复盘", href: "review.html", icon: "📈" },
-  { label: "资源库", href: "resources.html", icon: "📚" },
+  { label: "数据仪表盘", href: "index.html", icon: "📊", section: "核心" },
+  { label: "赛道规划", href: "tracks.html", icon: "🎯", section: "核心" },
+  { label: "财务记账", href: "finance.html", icon: "💰", section: "核心" },
+  { label: "客户CRM", href: "crm.html", icon: "👥", section: "核心" },
+  { label: "每日打卡", href: "daily.html", icon: "✅", section: "执行" },
+  { label: "月度复盘", href: "review.html", icon: "📈", section: "执行" },
+  { label: "资源库", href: "resources.html", icon: "📚", section: "辅助" },
 ];
 
-// 渲染顶部导航
+// 渲染侧边栏
 function renderNav(activeIndex) {
+  // 移动端汉堡按钮
+  const menuBtn = document.createElement("button");
+  menuBtn.className = "mobile-menu-btn";
+  menuBtn.innerHTML = "☰";
+  menuBtn.onclick = () => {
+    document.querySelector(".sidebar").classList.toggle("open");
+  };
+  document.body.appendChild(menuBtn);
+
+  // 侧边栏
+  const sidebar = document.createElement("aside");
+  sidebar.className = "sidebar";
+
+  // 头部
+  const header = document.createElement("div");
+  header.className = "sidebar-header";
+  header.innerHTML = `
+    <div class="sidebar-logo">
+      <div class="logo-icon">¥</div>
+      <div>
+        <div class="logo-text">百万工作台</div>
+        <div class="logo-subtext">1年100万目标管控</div>
+      </div>
+    </div>
+    <div class="sidebar-user">
+      <div class="avatar">耶</div>
+      <div class="user-info">
+        <div class="name">Yezi1-1</div>
+        <div class="role">独立创业者</div>
+      </div>
+    </div>
+  `;
+  sidebar.appendChild(header);
+
+  // 导航链接（按分组）
   const nav = document.createElement("nav");
-  nav.className = "top-nav";
-
-  const logo = document.createElement("div");
-  logo.className = "nav-logo";
-  logo.innerHTML = `<span class="logo-icon">¥</span>百万工作台`;
-  nav.appendChild(logo);
-
-  const links = document.createElement("div");
-  links.className = "nav-links";
+  nav.className = "sidebar-nav";
+  let lastSection = "";
   NAV_ITEMS.forEach((item, i) => {
+    if (item.section !== lastSection) {
+      const label = document.createElement("div");
+      label.className = "nav-section-label";
+      label.textContent = item.section;
+      nav.appendChild(label);
+      lastSection = item.section;
+    }
     const a = document.createElement("a");
-    a.className = "nav-link" + (i === activeIndex ? " active" : "");
+    a.className = "sidebar-link" + (i === activeIndex ? " active" : "");
     a.href = item.href;
-    a.textContent = item.label;
-    links.appendChild(a);
+    a.innerHTML = `<span class="nav-icon">${item.icon}</span><span>${item.label}</span>`;
+    a.onclick = (e) => {
+      // 移动端点击后关闭侧边栏
+      if (window.innerWidth <= 768) {
+        sidebar.classList.remove("open");
+      }
+    };
+    nav.appendChild(a);
   });
-  nav.appendChild(links);
+  sidebar.appendChild(nav);
 
-  const time = document.createElement("div");
-  time.className = "nav-time";
-  time.id = "nav-time";
-  nav.appendChild(time);
+  // 底部状态
+  const footer = document.createElement("div");
+  footer.className = "sidebar-footer";
+  footer.innerHTML = `
+    <div class="status-row">
+      <span class="status-dot"></span>
+      <span>系统运行中</span>
+      <span style="margin-left:auto;" id="nav-time"></span>
+    </div>
+    <div class="progress-mini">
+      <div class="label">
+        <span>目标进度</span>
+        <span class="pct">38.4%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:38.4%;"></div></div>
+    </div>
+    <div style="margin-top:8px; font-size:11px; color:var(--text-muted);">
+      今日收入 <span class="text-gold">¥1,860</span> · 连续打卡 <span class="text-gold">23天</span>
+    </div>
+  `;
+  sidebar.appendChild(footer);
 
-  document.body.insertBefore(nav, document.body.firstChild);
+  document.body.appendChild(sidebar);
+
+  // 遮罩层
+  const overlay = document.createElement("div");
+  overlay.className = "sidebar-overlay";
+  overlay.onclick = () => sidebar.classList.remove("open");
+  document.body.appendChild(overlay);
 
   // 实时时间
   function updateTime() {
     const now = new Date();
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, "0");
-    const d = String(now.getDate()).padStart(2, "0");
     const h = String(now.getHours()).padStart(2, "0");
     const mi = String(now.getMinutes()).padStart(2, "0");
-    const s = String(now.getSeconds()).padStart(2, "0");
-    document.getElementById("nav-time").textContent = `${y}.${m}.${d} ${h}:${mi}:${s}`;
+    const el = document.getElementById("nav-time");
+    if (el) el.textContent = `${h}:${mi}`;
   }
   updateTime();
   setInterval(updateTime, 1000);
