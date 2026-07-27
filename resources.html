@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>资源库 | 百万搞钱工作台</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .resource-tab {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .rtab {
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+    .rtab.active { background: var(--gold-glow); color: var(--gold); border-color: var(--border-gold); }
+    .resource-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .resource-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .resource-card:hover { border-color: var(--border-gold); background: var(--bg-card-hover); }
+    .resource-card .title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .resource-card .desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+    .resource-card .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .resource-card .link {
+      font-size: 12px;
+      color: var(--gold);
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .script-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 16px;
+      border-left: 3px solid var(--gold);
+    }
+    .script-card .scenario {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .script-card .content {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      white-space: pre-wrap;
+      background: var(--bg-input);
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .script-card .content strong { color: var(--text-primary); }
+    .tool-link {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 10px;
+      transition: all 0.2s;
+    }
+    .tool-link:hover { border-color: var(--border-gold); }
+    .tool-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--gold-glow), transparent);
+      border: 1px solid var(--border-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .tool-info { flex: 1; }
+    .tool-info .name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+    .tool-info .desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .tool-link .visit {
+      font-size: 12px;
+      color: var(--gold);
+      text-decoration: none;
+      padding: 6px 14px;
+      border: 1px solid var(--border-gold);
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <script src="assets/common.js"></script>
+  <script>renderNav(6);</script>
+
+  <div class="page-container">
+    <div class="page-header">
+      <div class="page-title">资源<span class="accent">库</span></div>
+      <div class="page-subtitle">话术 · 素材 · 工具链接 一站收纳</div>
+    </div>
+
+    <!-- 分类标签 -->
+    <div class="resource-tab">
+      <div class="rtab active" onclick="switchTab('scripts', this)">💬 话术库</div>
+      <div class="rtab" onclick="switchTab('materials', this)">🎨 素材库</div>
+      <div class="rtab" onclick="switchTab('tools', this)">🔧 工具链接</div>
+      <div class="rtab" onclick="switchTab('templates', this)">📄 模板文档</div>
+      <button class="btn btn-gold" style="margin-left:auto;">+ 新增资源</button>
+    </div>
+
+    <!-- 话术库 -->
+    <div id="tab-scripts" class="tab-content">
+      <div class="script-card">
+        <div class="scenario">🎯 意向客户首次触达话术</div>
+        <div class="content">你好呀！看到你关注了<strong>{赛道/痛点}</strong>方面的内容，我是专门做这块的。
+
+目前我有一个<strong>免费试听课/体验服务</strong>，很多和你情况类似的朋友都通过它拿到了不错的成果，要不要也试试看？完全免费的哈 😊
+
+感兴趣的话我发你链接~</div>
+      </div>
+
+      <div class="script-card">
+        <div class="scenario">💰 训练营成交转化话术</div>
+        <div class="content">咱们训练营这期还剩<strong>3个名额</strong>，今晚12点截止早鸟价。
+
+你之前了解的信息我都同步给你了：
+1️⃣ <strong>7天系统课</strong> + 答疑社群
+2️⃣ <strong>1v1诊断</strong>一次（价值¥1000）
+3️⃣ 结业后<strong>资源对接</strong> + 转介绍佣金
+
+原价¥999，早鸟价<strong>¥799</strong>，支持分期。
+
+你这边还有什么顾虑吗？可以直接说，我帮你分析~</div>
+      </div>
+
+      <div class="script-card">
+        <div class="scenario">🔄 老客户复购/续费话术</div>
+        <div class="content">嗨~ 训练营学完有一段时间了，最近实操还顺利吗？
+
+有个好消息：咱们的<strong>年度会员社群</strong>开放了，里面有：
+· 每周最新案例拆解
+· 资源对接 + 异业合作
+· 月度答疑直播
+
+老学员专享价 <strong>¥199/月</strong>（原¥299），前20名还送1次1v1。
+
+要不要加入？老朋友了给你留个名额 🤝</div>
+      </div>
+
+      <div class="script-card">
+        <div class="scenario">🛒 直播带货开场话术</div>
+        <div class="content">欢迎来到直播间！今天给大家带来<strong>3款精选好物</strong>，都是我自己用过觉得好才推的。
+
+第一波福利先到先得：<strong>限量50份，手慢无！</strong>
+
+新进来的朋友先点个关注，左上角抢福袋~
+有问题直接弹幕问我，一个个给你们解答！</div>
+      </div>
+
+      <div class="script-card">
+        <div class="scenario">📞 售后关怀话术</div>
+        <div class="content">收到货了吗？使用过程中有任何问题随时找我哈~
+
+我整理了一份<strong>使用指南</strong>，需要的话我发你。
+如果觉得好用，晒图好评可以领<strong>10元返现券</strong>，下次购物直接抵扣 🎁
+
+有什么建议也欢迎提，我认真听~</div>
+      </div>
+    </div>
+
+    <!-- 素材库 -->
+    <div id="tab-materials" class="tab-content" style="display:none;">
+      <div class="resource-grid">
+        <div class="resource-card">
+          <div class="title">🎬 短视频开头Hook模板</div>
+          <div class="desc">15个高转化开头模板，涵盖痛点型、反差型、数字型、悬念型等，直接套用改词即可</div>
+          <div class="tags"><span class="tag tag-gold">短视频</span><span class="tag tag-gray">15个</span></div>
+          <div class="link">📄 查看文档</div>
+        </div>
+        <div class="resource-card">
+          <div class="title">📝 小红书爆款标题库</div>
+          <div class="desc">收集了200+小红书热门标题模板，按赛道分类，搜索量高、点击率强</div>
+          <div class="tags"><span class="tag tag-orange">小红书</span><span class="tag tag-gray">200+</span></div>
+          <div class="link">📄 查看文档</div>
+        </div>
+        <div class="resource-card">
+          <div class="title">🎨 封面设计模板PSD</div>
+          <div class="desc">12套黑金商务风封面模板，适用于课程封面、直播预告、活动海报</div>
+          <div class="tags"><span class="tag tag-blue">设计</span><span class="tag tag-gray">12套</span></div>
+          <div class="link">📄 下载文件</div>
+        </div>
+        <div class="resource-card">
+          <div class="title">📊 数据可视化图表素材</div>
+          <div class="desc">营收趋势、对比分析、漏斗图等常用图表素材，深色金风格，可编辑</div>
+          <div class="tags"><span class="tag tag-gold">图表</span><span class="tag tag-gray">20+</span></div>
+          <div class="link">📄 查看素材</div>
+        </div>
+        <div class="resource-card">
+          <div class="title">💬 评论区互动话术包</div>
+          <div class="desc">评论区引导互动、制造话题、处理差评等场景话术合集</div>
+          <div class="tags"><span class="tag tag-orange">互动</span><span class="tag tag-gray">50条</span></div>
+          <div class="link">📄 查看文档</div>
+        </div>
+        <div class="resource-card">
+          <div class="title">📧 私域社群运营SOP</div>
+          <div class="desc">从入群欢迎、日常互动、活动预告到促单转化的全套社群运营流程</div>
+          <div class="tags"><span class="tag tag-gold">SOP</span><span class="tag tag-gray">完整</span></div>
+          <div class="link">📄 查看文档</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 工具链接 -->
+    <div id="tab-tools" class="tab-content" style="display:none;">
+      <div class="tool-link">
+        <div class="tool-icon">📈</div>
+        <div class="tool-info">
+          <div class="name">蝉妈妈 / 飞瓜数据</div>
+          <div class="desc">抖音/快手电商数据分析，选品、达人、直播监控</div>
+        </div>
+        <a class="visit" href="https://www.feigua.cn" target="_blank">访问 →</a>
+      </div>
+      <div class="tool-link">
+        <div class="tool-icon">📊</div>
+        <div class="tool-info">
+          <div class="name">千瓜数据</div>
+          <div class="desc">小红书数据分析平台，爆款笔记、热门话题、达人监控</div>
+        </div>
+        <a class="visit" href="https://www.qian-gua.com" target="_blank">访问 →</a>
+      </div>
+      <div class="tool-link">
+        <div class="tool-icon">🎬</div>
+        <div class="tool-info">
+          <div class="name">剪映 / CapCut</div>
+          <div class="desc">短视频剪辑工具，模板丰富，小白也能快速出片</div>
+        </div>
+        <a class="visit" href="https://www.capcut.com" target="_blank">访问 →</a>
+      </div>
+      <div class="tool-link">
+        <div class="tool-icon">🎨</div>
+        <div class="tool-info">
+          <div class="name">Canva 可画</div>
+          <div class="desc">在线设计工具，封面、海报、PPT模板，团队协作</div>
+        </div>
+        <a class="visit" href="https://www.canva.cn" target="_blank">访问 →</a>
+      </div>
+      <div class="tool-link">
+        <div class="tool-icon">🤖</div>
+        <div class="tool-info">
+          <div class="name">ChatGPT / Claude</div>
+          <div class="desc">AI辅助内容创作，文案、脚本、数据分析、客服回复</div>
+        </div>
+        <a class="visit" href="https://chat.openai.com" target="_blank">访问 →</a>
+      </div>
+      <div class="tool-link">
+        <div class="tool-icon">💬</div>
+        <div class="tool-info">
+          <div class="name">企业微信 / WeTool</div>
+          <div class="desc">私域客户管理，社群批量运营，客户标签SOP</div>
+        </div>
+        <a class="visit" href="https://work.weixin.qq.com" target="_blank">访问 →</a>
+      </div>
+      <div class="tool-link">
+        <div class="tool-icon">📝</div>
+        <div class="tool-info">
+          <div class="name">Notion / 飞书文档</div>
+          <div class="desc">知识库管理，内容素材整理，项目协作</div>
+        </div>
+        <a class="visit" href="https://www.notion.so" target="_blank">访问 →</a>
+      </div>
+      <div class="tool-link">
+        <div class="tool-icon">🛒</div>
+        <div class="tool-info">
+          <div class="name">1688 / 精选联盟</div>
+          <div class="desc">选品采购/分销带货，货源一件代发，佣金商品池</div>
+        </div>
+        <a class="visit" href="https://www.1688.com" target="_blank">访问 →</a>
+      </div>
+      <div class="tool-link">
+        <div class="tool-icon">💡</div>
+        <div class="tool-info">
+          <div class="name">巨量算数 / 百度指数</div>
+          <div class="desc">趋势洞察工具，关键词热度分析，选品选题参考</div>
+        </div>
+        <a class="visit" href="https://trendinsight.oceanengine.com" target="_blank">访问 →</a>
+      </div>
+      <div class="tool-link">
+        <div class="tool-icon">📤</div>
+        <div class="tool-info">
+          <div class="name">蚁坊 / 融媒宝</div>
+          <div class="desc">多平台一键分发工具，短视频图文跨平台同步发布</div>
+        </div>
+        <a class="visit" href="#" target="_blank">访问 →</a>
+      </div>
+    </div>
+
+    <!-- 模板文档 -->
+    <div id="tab-templates" class="tab-content" style="display:none;">
+      <div class="resource-grid">
+        <div class="resource-card">
+          <div class="title">📋 客户画像分析模板</div>
+          <div class="desc">标准化客户画像表，含人口属性、消费习惯、痛点需求、决策路径等维度</div>
+          <div class="tags"><span class="tag tag-gold">CRM</span></div>
+          <div class="link">📄 查看模板</div>
+        </div>
+        <div class="resource-card">
+          <div class="title">💰 定价策略计算表</div>
+          <div class="desc">成本+利润+市场三维度定价模型，自动计算客单价与利润率</div>
+          <div class="tags"><span class="tag tag-blue">财务</span></div>
+          <div class="link">📄 查看模板</div>
+        </div>
+        <div class="resource-card">
+          <div class="title">📅 内容排期表模板</div>
+          <div class="desc">7天内容排期模板，按平台×时段×内容类型规划发布日历</div>
+          <div class="tags"><span class="tag tag-orange">运营</span></div>
+          <div class="link">📄 查看模板</div>
+        </div>
+        <div class="resource-card">
+          <div class="title">📊 直播带货脚本模板</div>
+          <div class="desc">从开场暖场到逼单成交的全流程直播脚本，含话术与时间节点</div>
+          <div class="tags"><span class="tag tag-gold">直播</span></div>
+          <div class="link">📄 查看模板</div>
+        </div>
+        <div class="resource-card">
+          <div class="title">📈 月度复盘报告模板</div>
+          <div class="desc">标准化月度复盘框架，数据回顾+归因分析+优化计划</div>
+          <div class="tags"><span class="tag tag-blue">复盘</span></div>
+          <div class="link">📄 查看模板</div>
+        </div>
+        <div class="resource-card">
+          <div class="title">🤝 异业合作方案模板</div>
+          <div class="desc">BD合作方案模板，含资源置换、分成模式、合作流程</div>
+          <div class="tags"><span class="tag tag-gold">BD</span></div>
+          <div class="link">📄 查看模板</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function switchTab(tab, el) {
+      document.querySelectorAll(".rtab").forEach(t => t.classList.remove("active"));
+      el.classList.add("active");
+      document.querySelectorAll(".tab-content").forEach(c => c.style.display = "none");
+      document.getElementById("tab-" + tab).style.display = "block";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>客户管理CRM | 百万搞钱工作台</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .pipeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .pipeline-stage {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+    .pipeline-stage .count { font-size: 36px; font-weight: 700; color: var(--gold); }
+    .pipeline-stage .label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+    .pipeline-stage .amount { font-size: 12px; color: var(--text-secondary); margin-top: 8px; }
+    .pipeline-stage.lead { border-top: 3px solid var(--blue); }
+    .pipeline-stage.intent { border-top: 3px solid var(--orange); }
+    .pipeline-stage.deal { border-top: 3px solid var(--green); }
+    .pipeline-stage.after { border-top: 3px solid var(--gold); }
+    .tab-bar { display: flex; gap: 8px; margin-bottom: 20px; }
+    .tab {
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+    .tab.active { background: var(--gold-glow); color: var(--gold); border-color: var(--border-gold); }
+    .table-wrap { overflow-x: auto; }
+    .avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #000;
+      margin-right: 8px;
+    }
+    .customer-name { display: flex; align-items: center; }
+    .action-btn {
+      padding: 4px 10px;
+      font-size: 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      margin-right: 4px;
+    }
+    .action-btn:hover { color: var(--gold); border-color: var(--border-gold); }
+  </style>
+</head>
+<body>
+  <script src="assets/common.js"></script>
+  <script>renderNav(3);</script>
+
+  <div class="page-container">
+    <div class="page-header">
+      <div class="page-title">客户<span class="accent">管理CRM</span></div>
+      <div class="page-subtitle">线索 → 意向 → 成交 → 售后 全链路管理</div>
+    </div>
+
+    <!-- 销售漏斗 -->
+    <div class="pipeline">
+      <div class="pipeline-stage lead">
+        <div class="count">186</div>
+        <div class="label">线索客户</div>
+        <div class="amount">待跟进 · 转化率 35%</div>
+      </div>
+      <div class="pipeline-stage intent">
+        <div class="count">65</div>
+        <div class="label">意向客户</div>
+        <div class="amount">沟通中 · 转化率 45%</div>
+      </div>
+      <div class="pipeline-stage deal">
+        <div class="count">127</div>
+        <div class="label">成交客户</div>
+        <div class="amount">¥384,200 累计成交</div>
+      </div>
+      <div class="pipeline-stage after">
+        <div class="count">89</div>
+        <div class="label">售后/复购</div>
+        <div class="amount">复购率 70% · ¥68,500</div>
+      </div>
+    </div>
+
+    <!-- 筛选标签 -->
+    <div class="tab-bar">
+      <div class="tab active" onclick="filterTab('all', this)">全部客户 (467)</div>
+      <div class="tab" onclick="filterTab('lead', this)">线索 (186)</div>
+      <div class="tab" onclick="filterTab('intent', this)">意向 (65)</div>
+      <div class="tab" onclick="filterTab('deal', this)">成交 (127)</div>
+      <div class="tab" onclick="filterTab('after', this)">售后 (89)</div>
+      <button class="btn btn-gold" style="margin-left:auto;">+ 新增客户</button>
+    </div>
+
+    <!-- 客户表格 -->
+    <div class="card">
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>客户</th>
+              <th>来源</th>
+              <th>赛道</th>
+              <th>阶段</th>
+              <th>成交金额</th>
+              <th>最近跟进</th>
+              <th>下次计划</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="crm-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const customers = [
+      { name: "张明", initial: "张", source: "小红书", track: "知识付费", stage: "成交", amount: 999, lastFollow: "07-25", nextPlan: "复购推荐" },
+      { name: "李婷", initial: "李", source: "抖音", track: "电商带货", stage: "意向", amount: 0, lastFollow: "07-26", nextPlan: "07-28 发样品" },
+      { name: "王浩", initial: "王", source: "公众号", track: "知识付费", stage: "成交", amount: 3000, lastFollow: "07-24", nextPlan: "咨询交付" },
+      { name: "陈雪", initial: "陈", source: "转介绍", track: "知识付费", stage: "售后", amount: 199, lastFollow: "07-23", nextPlan: "8月续费" },
+      { name: "刘洋", initial: "刘", source: "直播", track: "电商带货", stage: "成交", amount: 420, lastFollow: "07-22", nextPlan: "好评返券" },
+      { name: "赵芳", initial: "赵", source: "B站", track: "自媒体", stage: "线索", amount: 0, lastFollow: "07-21", nextPlan: "07-29 首次触达" },
+      { name: "孙磊", initial: "孙", source: "小红书", track: "知识付费", stage: "意向", amount: 0, lastFollow: "07-26", nextPlan: "发送试听课" },
+      { name: "周敏", initial: "周", source: "抖音", track: "电商带货", stage: "成交", amount: 1280, lastFollow: "07-20", nextPlan: "社群团购" },
+      { name: "吴鹏", initial: "吴", source: "公众号", track: "知识付费", stage: "售后", amount: 1999, lastFollow: "07-19", nextPlan: "会员服务" },
+      { name: "郑丽", initial: "郑", source: "直播", track: "电商带货", stage: "线索", amount: 0, lastFollow: "07-18", nextPlan: "07-30 直播预约" },
+      { name: "黄强", initial: "黄", source: "转介绍", track: "知识付费", stage: "成交", amount: 999, lastFollow: "07-17", nextPlan: "训练营开课" },
+      { name: "林娜", initial: "林", source: "小红书", track: "自媒体", stage: "意向", amount: 0, lastFollow: "07-26", nextPlan: "广告报价沟通" },
+    ];
+
+    const stageMap = {
+      "线索": { tag: "tag-blue", stageClass: "lead" },
+      "意向": { tag: "tag-orange", stageClass: "intent" },
+      "成交": { tag: "tag-green", stageClass: "deal" },
+      "售后": { tag: "tag-gold", stageClass: "after" },
+    };
+
+    const trackMap = {
+      "知识付费": "tag-gold",
+      "电商带货": "tag-blue",
+      "自媒体": "tag-orange",
+    };
+
+    function renderCustomers(filter = "all") {
+      const tbody = document.getElementById("crm-tbody");
+      tbody.innerHTML = "";
+      const filtered = filter === "all" ? customers : customers.filter(c => {
+        const m = { lead: "线索", intent: "意向", deal: "成交", after: "售后" };
+        return c.stage === m[filter];
+      });
+      filtered.forEach(c => {
+        const s = stageMap[c.stage];
+        const t = trackMap[c.track];
+        tbody.innerHTML += `
+          <tr>
+            <td>
+              <div class="customer-name">
+                <span class="avatar">${c.initial}</span>
+                <span>${c.name}</span>
+              </div>
+            </td>
+            <td><span class="tag tag-gray">${c.source}</span></td>
+            <td><span class="tag ${t}">${c.track}</span></td>
+            <td><span class="tag ${s.tag}">${c.stage}</span></td>
+            <td class="${c.amount ? 'text-green font-bold' : 'text-muted'}">${c.amount ? "¥" + c.amount.toLocaleString() : "—"}</td>
+            <td>${c.lastFollow}</td>
+            <td class="text-secondary">${c.nextPlan}</td>
+            <td>
+              <button class="action-btn">跟进</button>
+              <button class="action-btn">详情</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function filterTab(stage, el) {
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+      el.classList.add("active");
+      renderCustomers(stage);
+    }
+
+    renderCustomers();
+  </script>
+</body>
+</html>

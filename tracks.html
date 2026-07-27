@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>变现赛道规划 | 百万搞钱工作台</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .track-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .track-header {
+      padding: 24px;
+      background: linear-gradient(135deg, rgba(212,175,55,0.08), transparent);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .track-header h3 { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+    .track-header .desc { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+    .track-body { padding: 24px; }
+    .track-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .info-block { margin-bottom: 20px; }
+    .info-block:last-child { margin-bottom: 0; }
+    .info-block h4 { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+    .pricing-row { display: flex; gap: 12px; }
+    .pricing-item {
+      flex: 1;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+    }
+    .pricing-item .name { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+    .pricing-item .price { font-size: 20px; font-weight: 700; color: var(--gold); }
+    .channel-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .channel-item:last-child { border-bottom: none; }
+    .channel-item .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+    .calc-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px; border-bottom: 1px solid var(--border); }
+    .calc-row:last-child { border-bottom: none; }
+    .calc-row.total { font-weight: 700; color: var(--gold); font-size: 15px; padding-top: 14px; }
+    .calc-row .label { color: var(--text-secondary); }
+    .calc-row .val { color: var(--text-primary); }
+  </style>
+</head>
+<body>
+  <script src="assets/common.js"></script>
+  <script>renderNav(1);</script>
+
+  <div class="page-container">
+    <div class="page-header">
+      <div class="page-title">变现<span class="accent">赛道规划</span></div>
+      <div class="page-subtitle">3条盈利赛道 · 目标拆解到执行颗粒度</div>
+    </div>
+
+    <!-- 赛道1：知识付费 -->
+    <div class="track-card">
+      <div class="track-header">
+        <div>
+          <h3>赛道一 · 知识付费（课程 + 咨询）</h3>
+          <div class="desc">利用专业技能打造线上课程与一对一咨询服务，高客单价、高利润率</div>
+        </div>
+        <span class="tag tag-gold">主力赛道</span>
+      </div>
+      <div class="track-body">
+        <div class="track-grid">
+          <div>
+            <div class="info-block">
+              <h4>盈利模型</h4>
+              <div style="font-size:13px; color:var(--text-secondary); line-height:1.8;">
+                <div>· 低客单：录播课 ¥199 → 引流转化</div>
+                <div>· 中客单：训练营 ¥999 → 批量交付</div>
+                <div>· 高客单：1v1咨询 ¥3,000 → 深度服务</div>
+                <div>· 复购：会员社群 ¥199/月 → 持续收入</div>
+              </div>
+            </div>
+            <div class="info-block">
+              <h4>定价策略</h4>
+              <div class="pricing-row">
+                <div class="pricing-item"><div class="name">录播课</div><div class="price">¥199</div></div>
+                <div class="pricing-item"><div class="name">训练营</div><div class="price">¥999</div></div>
+                <div class="pricing-item"><div class="name">1v1咨询</div><div class="price">¥3,000</div></div>
+                <div class="pricing-item"><div class="name">年会员</div><div class="price">¥1,999</div></div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="info-block">
+              <h4>获客方式</h4>
+              <div class="channel-item"><span class="dot"></span>小红书/抖音知识口播短视频引流</div>
+              <div class="channel-item"><span class="dot"></span>公众号深度文章 + 裂变海报</div>
+              <div class="channel-item"><span class="dot"></span>免费公开课/直播 → 高价转化</div>
+              <div class="channel-item"><span class="dot"></span>老客户转介绍（5%佣金激励）</div>
+              <div class="channel-item"><span class="dot"></span>异业合作：互补博主互推</div>
+            </div>
+            <div class="info-block">
+              <h4>年度收入测算</h4>
+              <div class="calc-row"><span class="label">录播课 ¥199 × 800人</span><span class="val">¥159,200</span></div>
+              <div class="calc-row"><span class="label">训练营 ¥999 × 150人</span><span class="val">¥149,850</span></div>
+              <div class="calc-row"><span class="label">1v1咨询 ¥3,000 × 40人</span><span class="val">¥120,000</span></div>
+              <div class="calc-row"><span class="label">会员 ¥199/月 × 50人 ×12</span><span class="val">¥119,400</span></div>
+              <div class="calc-row total"><span>年度总收入</span><span>¥548,450</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 赛道2：电商带货 -->
+    <div class="track-card">
+      <div class="track-header">
+        <div>
+          <h3>赛道二 · 电商带货（选品 + 分销）</h3>
+          <div class="desc">精选高佣金品类，通过内容种草+直播带货实现规模化销售</div>
+        </div>
+        <span class="tag tag-blue">增长赛道</span>
+      </div>
+      <div class="track-body">
+        <div class="track-grid">
+          <div>
+            <div class="info-block">
+              <h4>盈利模型</h4>
+              <div style="font-size:13px; color:var(--text-secondary); line-height:1.8;">
+                <div>· 分销带货：精选联盟/淘宝客，佣金15-30%</div>
+                <div>· 自营选品：1688代发，毛利35-50%</div>
+                <div>· 直播带货：橱窗+短视频挂车</div>
+                <div>· 团购接单：本地生活商家代运营</div>
+              </div>
+            </div>
+            <div class="info-block">
+              <h4>核心品类与佣金</h4>
+              <div class="pricing-row">
+                <div class="pricing-item"><div class="name">美妆个护</div><div class="price">25%</div></div>
+                <div class="pricing-item"><div class="name">家居百货</div><div class="price">35%</div></div>
+                <div class="pricing-item"><div class="name">食品零食</div><div class="price">20%</div></div>
+                <div class="pricing-item"><div class="name">数码3C</div><div class="price">15%</div></div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="info-block">
+              <h4>获客方式</h4>
+              <div class="channel-item"><span class="dot"></span>短视频种草 → 挂车转化</div>
+              <div class="channel-item"><span class="dot"></span>每周3场直播 → 冲动消费</div>
+              <div class="channel-item"><span class="dot"></span>私域社群团购（复购率高）</div>
+              <div class="channel-item"><span class="dot"></span>达人合作矩阵号分发</div>
+            </div>
+            <div class="info-block">
+              <h4>年度收入测算</h4>
+              <div class="calc-row"><span class="label">分销佣金 · GMV 80万 × 22%</span><span class="val">¥176,000</span></div>
+              <div class="calc-row"><span class="label">自营毛利 · GMV 40万 × 40%</span><span class="val">¥160,000</span></div>
+              <div class="calc-row"><span class="label">团购接单 · 50单 × 800</span><span class="val">¥40,000</span></div>
+              <div class="calc-row"><span class="label">直播打赏/坑位费</span><span class="val">¥24,000</span></div>
+              <div class="calc-row total"><span>年度总收入</span><span>¥400,000</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 赛道3：自媒体广告 -->
+    <div class="track-card">
+      <div class="track-header">
+        <div>
+          <h3>赛道三 · 自媒体广告（流量变现）</h3>
+          <div class="desc">多平台内容矩阵积累粉丝，通过广告接单与平台分成变现</div>
+        </div>
+        <span class="tag tag-orange">辅助赛道</span>
+      </div>
+      <div class="track-body">
+        <div class="track-grid">
+          <div>
+            <div class="info-block">
+              <h4>盈利模型</h4>
+              <div style="font-size:13px; color:var(--text-secondary); line-height:1.8;">
+                <div>· 平台广告分成（西瓜/B站/油管）</div>
+                <div>· 品牌广告植入（按粉丝量报价）</div>
+                <div>· 软文/种草文（小红书蒲公英）</div>
+                <div>· 知识付费导流（反哺赛道一）</div>
+              </div>
+            </div>
+            <div class="info-block">
+              <h4>平台与报价</h4>
+              <div class="pricing-row">
+                <div class="pricing-item"><div class="name">小红书软文</div><div class="price">¥3,000</div></div>
+                <div class="pricing-item"><div class="name">抖音视频</div><div class="price">¥5,000</div></div>
+                <div class="pricing-item"><div class="name">B站视频</div><div class="price">¥4,000</div></div>
+                <div class="pricing-item"><div class="name">公众号</div><div class="price">¥2,500</div></div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="info-block">
+              <h4>获客/涨粉方式</h4>
+              <div class="channel-item"><span class="dot"></span>日更短视频 · 紧跟热点</div>
+              <div class="channel-item"><span class="dot"></span>干货长文 · SEO长尾流量</div>
+              <div class="channel-item"><span class="dot"></span>跨平台分发 · 一鱼多吃</div>
+              <div class="channel-item"><span class="dot"></span>互粉群/话题互动涨粉</div>
+            </div>
+            <div class="info-block">
+              <h4>年度收入测算</h4>
+              <div class="calc-row"><span class="label">平台分成收益</span><span class="val">¥48,000</span></div>
+              <div class="calc-row"><span class="label">品牌广告 × 40条</span><span class="val">¥160,000</span></div>
+              <div class="calc-row"><span class="label">软文/种草 × 30篇</span><span class="val">¥45,000</span></div>
+              <div class="calc-row"><span class="label">导流佣金收入</span><span class="val">¥27,000</span></div>
+              <div class="calc-row total"><span>年度总收入</span><span>¥280,000</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 汇总 -->
+    <div class="card" style="border-color:var(--border-gold);">
+      <div class="card-title"><span class="icon">💎</span>三赛道收入汇总</div>
+      <div class="grid grid-4">
+        <div class="metric-card"><div class="metric-label">知识付费</div><div class="metric-value gold">¥548,450</div><div class="metric-delta">占比 44.7%</div></div>
+        <div class="metric-card"><div class="metric-label">电商带货</div><div class="metric-value gold">¥400,000</div><div class="metric-delta">占比 32.6%</div></div>
+        <div class="metric-card"><div class="metric-label">自媒体广告</div><div class="metric-value gold">¥280,000</div><div class="metric-delta">占比 22.7%</div></div>
+        <div class="metric-card" style="border-color:var(--gold);"><div class="metric-label">年度总目标</div><div class="metric-value gold">¥1,228,450</div><div class="metric-delta up">超出目标 22.8%</div></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 重新计算目标占比
+  </script>
+</body>
+</html>

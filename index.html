@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数据总仪表盘 | 百万搞钱工作台</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .hero-section {
+      background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+      border: 1px solid var(--border-gold);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+    .ring-canvas { width: 180px; height: 180px; flex-shrink: 0; }
+    .hero-info { flex: 1; }
+    .hero-info h2 { font-size: 14px; color: var(--text-muted); font-weight: 400; margin-bottom: 8px; }
+    .hero-amount { font-size: 42px; font-weight: 700; color: var(--gold); margin-bottom: 4px; }
+    .hero-target { font-size: 14px; color: var(--text-secondary); margin-bottom: 16px; }
+    .hero-stats { display: flex; gap: 32px; }
+    .hero-stat-item .label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+    .hero-stat-item .value { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+    .track-progress-item { margin-bottom: 16px; }
+    .track-progress-item:last-child { margin-bottom: 0; }
+    .track-name { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
+    .track-name .name { color: var(--text-primary); font-weight: 500; }
+    .track-name .amount { color: var(--gold); }
+    .heatmap { display: grid; grid-template-columns: repeat(30, 1fr); gap: 3px; margin-top: 8px; }
+    .heat-cell { aspect-ratio: 1; border-radius: 2px; background: #1a1a1a; }
+    .heat-1 { background: rgba(212,175,55,0.2); }
+    .heat-2 { background: rgba(212,175,55,0.4); }
+    .heat-3 { background: rgba(212,175,55,0.6); }
+    .heat-4 { background: rgba(212,175,55,0.9); }
+  </style>
+</head>
+<body>
+  <script src="assets/common.js"></script>
+  <script>renderNav(0);</script>
+
+  <div class="page-container">
+    <div class="page-header">
+      <div class="page-title">数据<span class="accent">总仪表盘</span></div>
+      <div class="page-subtitle">1年100万目标 · 全局进度管控</div>
+    </div>
+
+    <!-- 目标进度总览 -->
+    <div class="hero-section">
+      <canvas id="goal-ring" class="ring-canvas"></canvas>
+      <div class="hero-info">
+        <h2>年度目标完成进度</h2>
+        <div class="hero-amount">¥ 384,200</div>
+        <div class="hero-target">目标 ¥1,000,000 · 已过 187天 / 365天</div>
+        <div class="hero-stats">
+          <div class="hero-stat-item">
+            <div class="label">日均收入</div>
+            <div class="value">¥2,055</div>
+          </div>
+          <div class="hero-stat-item">
+            <div class="label">目标日均</div>
+            <div class="value">¥2,740</div>
+          </div>
+          <div class="hero-stat-item">
+            <div class="label">缺口</div>
+            <div class="value text-red">¥615,800</div>
+          </div>
+          <div class="hero-stat-item">
+            <div class="label">预计完成</div>
+            <div class="value">2026.03</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 核心指标卡片 -->
+    <div class="grid grid-4 mb-24">
+      <div class="metric-card">
+        <div class="metric-label">本月收入</div>
+        <div class="metric-value gold">¥52,300</div>
+        <div class="metric-delta up">↑ 18.5% vs 上月</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">本月支出</div>
+        <div class="metric-value">¥8,200</div>
+        <div class="metric-delta down">↓ 5.2% vs 上月</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">本月利润</div>
+        <div class="metric-value green">¥44,100</div>
+        <div class="metric-delta up">↑ 24.1% vs 上月</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">成交客户数</div>
+        <div class="metric-value">127</div>
+        <div class="metric-delta up">↑ 12 新增</div>
+      </div>
+    </div>
+
+    <!-- 图表区 -->
+    <div class="grid grid-2 mb-24">
+      <div class="card">
+        <div class="card-title"><span class="icon">📈</span>月度收益趋势</div>
+        <canvas id="income-trend" style="width:100%; height:280px;"></canvas>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="icon">📊</span>各赛道收入对比</div>
+        <canvas id="track-compare" style="width:100%; height:280px;"></canvas>
+      </div>
+    </div>
+
+    <!-- 目标拆解 + 活跃热力 -->
+    <div class="grid grid-2">
+      <div class="card">
+        <div class="card-title"><span class="icon">🎯</span>三大赛道目标拆解</div>
+        <div class="track-progress-item">
+          <div class="track-name">
+            <span class="name">知识付费 · 课程/咨询</span>
+            <span class="amount">¥168,000 / ¥400,000</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:42%;"></div></div>
+        </div>
+        <div class="track-progress-item">
+          <div class="track-name">
+            <span class="name">电商带货 · 选品分销</span>
+            <span class="amount">¥132,500 / ¥350,000</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:37.8%;"></div></div>
+        </div>
+        <div class="track-progress-item">
+          <div class="track-name">
+            <span class="name">自媒体广告 · 流量变现</span>
+            <span class="amount">¥83,700 / ¥250,000</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:33.5%;"></div></div>
+        </div>
+        <div class="track-progress-item" style="margin-top:20px; padding-top:16px; border-top:1px solid var(--border);">
+          <div class="track-name">
+            <span class="name font-bold">合计</span>
+            <span class="amount font-bold">¥384,200 / ¥1,000,000</span>
+          </div>
+          <div class="progress-bar" style="height:12px;"><div class="progress-fill" style="width:38.4%;"></div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="icon">🔥</span>执行活跃度（近90天）</div>
+        <div class="heatmap" id="heatmap"></div>
+        <div style="display:flex; align-items:center; gap:12px; margin-top:16px; font-size:12px; color:var(--text-muted);">
+          <span>少</span>
+          <div class="heat-cell" style="width:14px; height:14px;"></div>
+          <div class="heat-cell heat-1" style="width:14px; height:14px;"></div>
+          <div class="heat-cell heat-2" style="width:14px; height:14px;"></div>
+          <div class="heat-cell heat-3" style="width:14px; height:14px;"></div>
+          <div class="heat-cell heat-4" style="width:14px; height:14px;"></div>
+          <span>多</span>
+          <span style="margin-left:auto;">连续打卡 <span class="text-gold font-bold">23</span> 天</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 环形进度
+    drawRingChart("goal-ring", 38.4, "#d4af37", "目标完成");
+
+    // 月度趋势
+    drawLineChart("income-trend",
+      ["1月","2月","3月","4月","5月","6月","7月"],
+      [28000, 35000, 42000, 38000, 48000, 51000, 52300]
+    );
+
+    // 赛道对比
+    drawBarChart("track-compare",
+      ["知识付费","电商带货","自媒体"],
+      [168000, 132500, 83700]
+    );
+
+    // 热力图
+    const heatmap = document.getElementById("heatmap");
+    for (let i = 0; i < 90; i++) {
+      const cell = document.createElement("div");
+      cell.className = "heat-cell";
+      const r = Math.random();
+      if (r > 0.85) cell.classList.add("heat-4");
+      else if (r > 0.6) cell.classList.add("heat-3");
+      else if (r > 0.4) cell.classList.add("heat-2");
+      else if (r > 0.2) cell.classList.add("heat-1");
+      heatmap.appendChild(cell);
+    }
+  </script>
+</body>
+</html>
