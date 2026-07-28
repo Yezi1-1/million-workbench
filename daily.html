@@ -29,25 +29,25 @@
     </div>
 
     <!-- 存钱自律 -->
-    <div class="section-label">💰 存钱自律</div>
+    <div class="section-label flex-between">💰 存钱自律<span style="font-size:12px;color:var(--green-deep);cursor:pointer;" onclick="addDailyTask('moneyTasks')">+ 添加任务</span></div>
     <div class="card">
       <div id="money-tasks"></div>
     </div>
 
     <!-- 减脂运动 -->
-    <div class="section-label">🌸 减脂运动</div>
+    <div class="section-label flex-between">🌸 减脂运动<span style="font-size:12px;color:var(--green-deep);cursor:pointer;" onclick="addDailyTask('fitnessTasks')">+ 添加任务</span></div>
     <div class="card">
       <div id="fitness-tasks"></div>
     </div>
 
     <!-- 英语学习 -->
-    <div class="section-label">📖 英语学习</div>
+    <div class="section-label flex-between">📖 英语学习<span style="font-size:12px;color:var(--green-deep);cursor:pointer;" onclick="addDailyTask('englishTasks')">+ 添加任务</span></div>
     <div class="card">
       <div id="english-tasks"></div>
     </div>
 
     <!-- 刷爆款找灵感 -->
-    <div class="section-label">✨ 刷爆款找灵感</div>
+    <div class="section-label flex-between">✨ 刷爆款找灵感<span style="font-size:12px;color:var(--green-deep);cursor:pointer;" onclick="addDailyTask('trendingTasks')">+ 添加任务</span></div>
     <div class="card">
       <div id="trending-tasks"></div>
     </div>
@@ -122,9 +122,13 @@
       c.innerHTML = "";
       taskData[key].forEach((t,i) => {
         c.innerHTML += `
-          <div class="task-item ${t.done?'done':''}" onclick="toggleDaily('${key}',${i},this)">
-            <div class="task-check"><span class="check">✓</span></div>
-            <div class="task-text">${t.text}</div>
+          <div class="task-item ${t.done?'done':''}">
+            <div class="task-check" onclick="toggleDaily('${key}',${i},this)"><span class="check">✓</span></div>
+            <div class="task-text" onclick="editDaily('${key}',${i})">${t.text}</div>
+            <div class="task-actions">
+              <button class="task-edit-btn" onclick="editDaily('${key}',${i})" title="编辑">✎</button>
+              <button class="task-del-btn" onclick="delDaily('${key}',${i})" title="删除">×</button>
+            </div>
           </div>`;
       });
       updateProgress();
@@ -135,6 +139,29 @@
       taskData[key][idx].done = el.classList.contains("done");
       DB.set(key, taskData[key]);
       updateProgress();
+    }
+    function editDaily(key, i) {
+      const v = prompt("修改任务：", taskData[key][i].text);
+      if (v && v.trim()) {
+        taskData[key][i].text = v.trim();
+        DB.set(key, taskData[key]);
+        renderTasks(key, key.replace("Tasks","-tasks"));
+      }
+    }
+    function delDaily(key, i) {
+      if (confirm("删除这个任务？")) {
+        taskData[key].splice(i, 1);
+        DB.set(key, taskData[key]);
+        renderTasks(key, key.replace("Tasks","-tasks"));
+      }
+    }
+    function addDailyTask(key) {
+      const v = prompt("添加新任务：");
+      if (v && v.trim()) {
+        taskData[key].push({ text: v.trim(), done: false });
+        DB.set(key, taskData[key]);
+        renderTasks(key, key.replace("Tasks","-tasks"));
+      }
     }
 
     function updateProgress() {

@@ -218,9 +218,14 @@
           <div class="list-item">
             <div class="li-icon" style="background:var(--green-light);">👀</div>
             <div class="li-content"><div class="li-title">${b.name}</div><div class="li-sub">${b.platform} · ${b.fans}粉 · ${b.note}</div></div>
-            <div class="li-right text-muted">监控中</div>
+            <div class="task-actions">
+              <button class="task-del-btn" onclick="delBlogger(${i})" title="删除">×</button>
+            </div>
           </div>`;
       });
+    }
+    function delBlogger(i) {
+      if (confirm("删除这个博主？")) { bloggers.splice(i,1); DB.set("bloggers", bloggers); renderBloggers(); }
     }
     function addBlogger() {
       const name = document.getElementById("b-name").value.trim();
@@ -244,13 +249,24 @@
       c.innerHTML = "";
       topics.forEach((t,i) => {
         c.innerHTML += `
-          <div class="task-item ${t.done?'done':''}" onclick="toggleTopic(${i})">
-            <div class="task-check"><span class="check">✓</span></div>
-            <div class="task-text">${t.text}</div>
+          <div class="task-item ${t.done?'done':''}">
+            <div class="task-check" onclick="toggleTopic(${i})"><span class="check">✓</span></div>
+            <div class="task-text" onclick="editTopic(${i})">${t.text}</div>
+            <div class="task-actions">
+              <button class="task-edit-btn" onclick="editTopic(${i})" title="编辑">✎</button>
+              <button class="task-del-btn" onclick="delTopic(${i})" title="删除">×</button>
+            </div>
           </div>`;
       });
     }
     function toggleTopic(i) { topics[i].done = !topics[i].done; DB.set("topics", topics); renderTopics(); }
+    function editTopic(i) {
+      const v = prompt("修改话题：", topics[i].text);
+      if (v && v.trim()) { topics[i].text = v.trim(); DB.set("topics", topics); renderTopics(); }
+    }
+    function delTopic(i) {
+      if (confirm("删除这个话题？")) { topics.splice(i,1); DB.set("topics", topics); renderTopics(); }
+    }
     document.getElementById("topic-input").addEventListener("keypress", e => {
       if (e.key === "Enter" && e.target.value.trim()) {
         topics.unshift({ text:e.target.value.trim(), done:false });
@@ -270,13 +286,24 @@
       c.innerHTML = "";
       ideas.forEach((t,i) => {
         c.innerHTML += `
-          <div class="task-item ${t.done?'done':''}" onclick="toggleIdea(${i})">
-            <div class="task-check"><span class="check">✓</span></div>
-            <div class="task-text">💡 ${t.text}</div>
+          <div class="task-item ${t.done?'done':''}">
+            <div class="task-check" onclick="toggleIdea(${i})"><span class="check">✓</span></div>
+            <div class="task-text" onclick="editIdea(${i})">💡 ${t.text}</div>
+            <div class="task-actions">
+              <button class="task-edit-btn" onclick="editIdea(${i})" title="编辑">✎</button>
+              <button class="task-del-btn" onclick="delIdea(${i})" title="删除">×</button>
+            </div>
           </div>`;
       });
     }
     function toggleIdea(i) { ideas[i].done = !ideas[i].done; DB.set("ideas", ideas); renderIdeas(); }
+    function editIdea(i) {
+      const v = prompt("修改灵感：", ideas[i].text);
+      if (v && v.trim()) { ideas[i].text = v.trim(); DB.set("ideas", ideas); renderIdeas(); }
+    }
+    function delIdea(i) {
+      if (confirm("删除这个灵感？")) { ideas.splice(i,1); DB.set("ideas", ideas); renderIdeas(); }
+    }
     document.getElementById("idea-input").addEventListener("keypress", e => {
       if (e.key === "Enter" && e.target.value.trim()) {
         ideas.unshift({ text:e.target.value.trim(), done:false });

@@ -138,11 +138,15 @@
         list.innerHTML += `
           <div class="list-item">
             <div class="li-icon" style="background:${r.type==='收入'?'var(--green-light)':'var(--pink-soft)'};">${r.type==='收入'?'💵':'🧾'}</div>
-            <div class="li-content">
+            <div class="li-content" onclick="editMoney(${i})" style="cursor:pointer;">
               <div class="li-title">${r.desc}</div>
               <div class="li-sub"><span class="tag ${tCls}">${r.type}</span> <span class="tag tag-gray">${r.cat}</span></div>
             </div>
             <div class="li-right" style="color:${r.type==='收入'?'var(--green-deep)':'#d97a85'}">${r.type==='收入'?'+':'-'}¥${r.amount}</div>
+            <div class="task-actions">
+              <button class="task-edit-btn" onclick="editMoney(${i})" title="编辑">✎</button>
+              <button class="task-del-btn" onclick="delMoney(${i})" title="删除">×</button>
+            </div>
           </div>`;
       });
 
@@ -179,6 +183,26 @@
       document.getElementById("m-desc").value = "";
       document.getElementById("m-amount").value = "";
       render();
+    }
+    function editMoney(i) {
+      const r = records[i];
+      const desc = prompt("修改说明：", r.desc);
+      if (desc === null) return;
+      const amount = prompt("修改金额：", r.amount);
+      if (amount === null) return;
+      const a = Number(amount);
+      if (!a) return;
+      records[i].desc = desc;
+      records[i].amount = a;
+      DB.set("moneyRecords", records);
+      render();
+    }
+    function delMoney(i) {
+      if (confirm("删除这条记录？")) {
+        records.splice(i, 1);
+        DB.set("moneyRecords", records);
+        render();
+      }
     }
 
     render();

@@ -300,6 +300,36 @@ body {
 .task-text { flex: 1; font-size: 14px; color: var(--text); }
 .task-tag { font-size: 11px; color: var(--text-muted); background: var(--cream-deep); padding: 3px 8px; border-radius: 6px; }
 
+.task-actions { display:flex; gap:4px; flex-shrink:0; }
+.task-edit-btn {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--green-soft); color: var(--green-deep);
+  border: none; cursor: pointer; font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.task-edit-btn:hover { background: var(--green); color: #fff; }
+.task-del-btn {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--pink-soft); color: #d97a85;
+  border: none; cursor: pointer; font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.task-del-btn:hover { background: var(--red); color: #fff; }
+
+.add-item-row {
+  display: flex; gap: 8px; margin-top: 12px;
+}
+.add-item-row .input { flex: 1; padding: 10px 12px; font-size: 13px; }
+.add-item-btn {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--grad-green); color: #fff;
+  border: none; cursor: pointer; font-size: 22px; font-weight: 700;
+  flex-shrink: 0; box-shadow: 0 3px 10px rgba(125,200,146,0.25);
+  display: flex; align-items: center; justify-content: center;
+}
+
 /* ===== 列表项 ===== */
 .list-item {
   display: flex; align-items: center; gap: 12px;

@@ -149,10 +149,13 @@
       c.innerHTML = "";
       words.forEach((w,i) => {
         c.innerHTML += `
-          <div class="task-item ${w.done?'done':''}" onclick="toggleWord(${i})">
-            <div class="task-check"><span class="check">✓</span></div>
-            <div class="task-text">${w.word}</div>
-            <span class="task-tag">${w.done?'已掌握':'待背'}</span>
+          <div class="task-item ${w.done?'done':''}">
+            <div class="task-check" onclick="toggleWord(${i})"><span class="check">✓</span></div>
+            <div class="task-text" onclick="editWord(${i})">${w.word}</div>
+            <div class="task-actions">
+              <button class="task-edit-btn" onclick="editWord(${i})" title="编辑">✎</button>
+              <button class="task-del-btn" onclick="delWord(${i})" title="删除">×</button>
+            </div>
           </div>`;
       });
     }
@@ -160,6 +163,21 @@
       words[i].done = !words[i].done;
       DB.set("words", words);
       renderWords();
+    }
+    function editWord(i) {
+      const v = prompt("修改单词：", words[i].word);
+      if (v && v.trim()) {
+        words[i].word = v.trim();
+        DB.set("words", words);
+        renderWords();
+      }
+    }
+    function delWord(i) {
+      if (confirm("删除这个单词？")) {
+        words.splice(i, 1);
+        DB.set("words", words);
+        renderWords();
+      }
     }
 
     document.getElementById("word-input").addEventListener("keypress", e => {

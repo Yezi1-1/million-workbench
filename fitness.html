@@ -52,6 +52,10 @@
     <div class="card">
       <div class="card-title"><span class="title-icon">🍱</span>今日三餐打卡</div>
       <div id="meal-list"></div>
+      <div class="add-item-row">
+        <input type="text" class="input" id="meal-input" placeholder="加一餐，如：下午茶 水果">
+        <button class="add-item-btn" onclick="addMeal()">+</button>
+      </div>
       <div class="input-row mt-16">
         <label>加餐/零食记录 (选填)</label>
         <input type="text" class="input" id="snack-input" placeholder="如：一杯酸奶 100卡">
@@ -62,6 +66,10 @@
     <div class="card">
       <div class="card-title"><span class="title-icon">🏃‍♀️</span>宿舍运动打卡</div>
       <div id="exercise-list"></div>
+      <div class="add-item-row">
+        <input type="text" class="input" id="exercise-input" placeholder="加一项运动，如：平板支撑 5min">
+        <button class="add-item-btn" onclick="addExercise()">+</button>
+      </div>
     </div>
 
     <!-- 热量记录 -->
@@ -147,10 +155,13 @@
       c.innerHTML = "";
       meals.forEach((m,i) => {
         c.innerHTML += `
-          <div class="task-item ${m.done?'done':''}" onclick="toggleMeal(${i})">
-            <div class="task-check"><span class="check">✓</span></div>
-            <div class="task-text">${m.name}<br><span style="font-size:12px;color:var(--text-muted);">${m.desc}</span></div>
-            <span class="task-tag">${m.done?'已打卡':'待打卡'}</span>
+          <div class="task-item ${m.done?'done':''}">
+            <div class="task-check" onclick="toggleMeal(${i})"><span class="check">✓</span></div>
+            <div class="task-text" onclick="editMeal(${i})">${m.name}<br><span style="font-size:12px;color:var(--text-muted);">${m.desc}</span></div>
+            <div class="task-actions">
+              <button class="task-edit-btn" onclick="editMeal(${i})" title="编辑">✎</button>
+              <button class="task-del-btn" onclick="delMeal(${i})" title="删除">×</button>
+            </div>
           </div>`;
       });
     }
@@ -158,6 +169,33 @@
       meals[i].done = !meals[i].done;
       DB.set("meals", meals);
       renderMeals();
+    }
+    function editMeal(i) {
+      const m = meals[i];
+      const name = prompt("餐次名称：", m.name);
+      if (name === null) return;
+      const desc = prompt("吃的什么：", m.desc);
+      if (desc === null) return;
+      meals[i].name = name;
+      meals[i].desc = desc;
+      DB.set("meals", meals);
+      renderMeals();
+    }
+    function addMeal() {
+      const v = document.getElementById("meal-input").value.trim();
+      if (!v) return;
+      const parts = v.split(/\s+/);
+      meals.unshift({ name: parts[0] || "加餐", desc: parts.slice(1).join(" ") || "—", done:false });
+      DB.set("meals", meals);
+      document.getElementById("meal-input").value = "";
+      renderMeals();
+    }
+    function delMeal(i) {
+      if (confirm("删除这餐？")) {
+        meals.splice(i, 1);
+        DB.set("meals", meals);
+        renderMeals();
+      }
     }
     renderMeals();
 
@@ -174,9 +212,13 @@
       c.innerHTML = "";
       exercises.forEach((e,i) => {
         c.innerHTML += `
-          <div class="task-item ${e.done?'done':''}" onclick="toggleEx(${i})">
-            <div class="task-check"><span class="check">✓</span></div>
-            <div class="task-text">${e.name}</div>
+          <div class="task-item ${e.done?'done':''}">
+            <div class="task-check" onclick="toggleEx(${i})"><span class="check">✓</span></div>
+            <div class="task-text" onclick="editEx(${i})">${e.name}</div>
+            <div class="task-actions">
+              <button class="task-edit-btn" onclick="editEx(${i})" title="编辑">✎</button>
+              <button class="task-del-btn" onclick="delEx(${i})" title="删除">×</button>
+            </div>
           </div>`;
       });
     }
@@ -185,7 +227,38 @@
       DB.set("exercises", exercises);
       renderEx();
     }
+    function editEx(i) {
+      const v = prompt("修改运动项：", exercises[i].name);
+      if (v && v.trim()) {
+        exercises[i].name = v.trim();
+        DB.set("exercises", exercises);
+        renderEx();
+      }
+    }
+    function addExercise() {
+      const v = document.getElementById("exercise-input").value.trim();
+      if (!v) return;
+      exercises.unshift({ name: v, done: false });
+      DB.set("exercises", exercises);
+      document.getElementById("exercise-input").value = "";
+      renderEx();
+    }
+    function delEx(i) {
+      if (confirm("删除这项运动？")) {
+        exercises.splice(i, 1);
+        DB.set("exercises", exercises);
+        renderEx();
+      }
+    }
     renderEx();
+
+    // 回车快捷新增
+    document.getElementById("meal-input").addEventListener("keypress", e => {
+      if (e.key === "Enter") addMeal();
+    });
+    document.getElementById("exercise-input").addEventListener("keypress", e => {
+      if (e.key === "Enter") addExercise();
+    });
   </script>
 </body>
 </html>
