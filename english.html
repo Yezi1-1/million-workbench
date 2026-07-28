@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>英语学习 | 成长工作台</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <script src="assets/common.js"></script>
+  <script>renderSidebar("english");</script>
+
+  <div class="main-content">
+    <div class="page-header">
+      <div class="page-title">📖 英语学习专区</div>
+      <div class="page-subtitle">每天进步一点点，四六级冲鸭！</div>
+    </div>
+
+    <!-- Streak卡片 -->
+    <div class="card" style="background:var(--grad-blue);color:#fff;border:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:12px;opacity:0.85;">学习连续打卡</div>
+          <div style="font-size:36px;font-weight:700;">15天 🔥</div>
+          <div style="font-size:12px;opacity:0.8;margin-top:4px;">累计学习 186小时 · 别断掉哦</div>
+        </div>
+        <div style="font-size:48px;">📚</div>
+      </div>
+    </div>
+
+    <!-- 四六级进度 -->
+    <div class="card">
+      <div class="card-title"><span class="title-icon">🎯</span>四级备考进度</div>
+      <div style="margin-bottom:14px;">
+        <div class="flex-between" style="margin-bottom:6px;font-size:13px;">
+          <span>单词 3500/4500</span><span style="color:#5a9cc4" class="font-bold">78%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:78%;background:var(--grad-blue);"></div></div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div class="flex-between" style="margin-bottom:6px;font-size:13px;">
+          <span>听力练习 28/40篇</span><span style="color:#5a9cc4" class="font-bold">70%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:70%;background:var(--grad-blue);"></div></div>
+      </div>
+      <div>
+        <div class="flex-between" style="margin-bottom:6px;font-size:13px;">
+          <span>真题 12/20套</span><span style="color:#5a9cc4" class="font-bold">60%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:60%;background:var(--grad-blue);"></div></div>
+      </div>
+    </div>
+
+    <!-- 单词打卡 -->
+    <div class="card">
+      <div class="card-title"><span class="title-icon">🔤</span>今日单词打卡</div>
+      <div class="grid-3" style="margin-bottom:16px;">
+        <div style="text-align:center;padding:14px;background:var(--blue-soft);border-radius:12px;">
+          <div style="font-size:11px;color:var(--text-muted);">今日背诵</div>
+          <div style="font-size:22px;font-weight:700;color:#5a9cc4;">80</div>
+        </div>
+        <div style="text-align:center;padding:14px;background:var(--blue-soft);border-radius:12px;">
+          <div style="font-size:11px;color:var(--text-muted);">已掌握</div>
+          <div style="font-size:22px;font-weight:700;color:#5a9cc4;">65</div>
+        </div>
+        <div style="text-align:center;padding:14px;background:var(--blue-soft);border-radius:12px;">
+          <div style="font-size:11px;color:var(--text-muted);">待复习</div>
+          <div style="font-size:22px;font-weight:700;color:#5a9cc4;">15</div>
+        </div>
+      </div>
+      <button class="btn btn-green btn-full" onclick="alert('开始背单词！加油～')">开始今日单词 →</button>
+    </div>
+
+    <!-- 待背单词清单 -->
+    <div class="card">
+      <div class="card-title"><span class="title-icon">📌</span>待背单词清单</div>
+      <div class="input-row">
+        <input type="text" class="input" id="word-input" placeholder="添加一个生词...">
+      </div>
+      <div id="word-list"></div>
+    </div>
+
+    <!-- 听力阅读记录 -->
+    <div class="card">
+      <div class="card-title"><span class="title-icon">🎧</span>听力/阅读记录</div>
+      <div class="input-row">
+        <div class="grid-2">
+          <input type="text" class="input" id="lr-desc" placeholder="内容如：BBC新闻3分钟">
+          <input type="number" class="input" id="lr-time" placeholder="时长(分钟)">
+        </div>
+      </div>
+      <button class="btn btn-outline btn-full" onclick="addLR()">+ 添加记录</button>
+      <div id="lr-list" class="mt-16"></div>
+    </div>
+
+    <!-- 口语练习台账 -->
+    <div class="card">
+      <div class="card-title"><span class="title-icon">💬</span>口语练习台账</div>
+      <div class="list-item">
+        <div class="li-icon" style="background:var(--blue-soft);">🗣️</div>
+        <div class="li-content"><div class="li-title">影子跟读 · TED演讲</div><div class="li-sub">20分钟 · 发音练习</div></div>
+        <span class="tag tag-blue">今日</span>
+      </div>
+      <div class="list-item">
+        <div class="li-icon" style="background:var(--blue-soft);">🗣️</div>
+        <div class="li-content"><div class="li-title">AI口语对话练习</div><div class="li-sub">15分钟 · 日常话题</div></div>
+        <span class="tag tag-blue">昨日</span>
+      </div>
+    </div>
+
+    <!-- 学习时长统计 -->
+    <div class="card">
+      <div class="card-title"><span class="title-icon">📊</span>本周学习时长</div>
+      <canvas id="study-chart" style="width:100%;height:200px;"></canvas>
+    </div>
+
+    <!-- 每周测试记录 -->
+    <div class="card">
+      <div class="card-title"><span class="title-icon">📝</span>每周测试记录</div>
+      <div class="data-table">
+        <table>
+          <thead><tr><th>日期</th><th>类型</th><th>分数</th><th>备注</th></tr></thead>
+          <tbody>
+            <tr><td>7/21</td><td><span class="tag tag-blue">听力</span></td><td class="font-bold" style="color:#5a9cc4;">28/35</td><td>选择题偏弱</td></tr>
+            <tr><td>7/18</td><td><span class="tag tag-green">阅读</span></td><td class="font-bold" style="color:var(--green-deep);">32/40</td><td>有进步！</td></tr>
+            <tr><td>7/14</td><td><span class="tag tag-orange">真题</span></td><td class="font-bold" style="color:#d97a3c;">485</td><td>差15分及格</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 学习时长图
+    setTimeout(() => {
+      drawBars("study-chart", ["周一","周二","周三","周四","周五","周六","周日"], [120, 90, 150, 110, 80, 180, 60], "#a3d5f0", "#cce8f7");
+    }, 100);
+
+    // 待背单词
+    let words = DB.get("words", [
+      { word:"abandon", done:false },
+      { word:"abstract", done:false },
+      { word:"acknowledge", done:true },
+      { word:"acquaintance", done:false },
+    ]);
+
+    function renderWords() {
+      const c = document.getElementById("word-list");
+      c.innerHTML = "";
+      words.forEach((w,i) => {
+        c.innerHTML += `
+          <div class="task-item ${w.done?'done':''}" onclick="toggleWord(${i})">
+            <div class="task-check"><span class="check">✓</span></div>
+            <div class="task-text">${w.word}</div>
+            <span class="task-tag">${w.done?'已掌握':'待背'}</span>
+          </div>`;
+      });
+    }
+    function toggleWord(i) {
+      words[i].done = !words[i].done;
+      DB.set("words", words);
+      renderWords();
+    }
+
+    document.getElementById("word-input").addEventListener("keypress", e => {
+      if (e.key === "Enter") {
+        const v = e.target.value.trim();
+        if (v) { words.unshift({ word:v, done:false }); DB.set("words", words); e.target.value=""; renderWords(); }
+      }
+    });
+    renderWords();
+
+    // 听力阅读
+    let lrRecords = DB.get("lrRecords", [
+      { desc:"BBC新闻3分钟", time:15 },
+      { desc:"四级听力Passage 2", time:20 },
+    ]);
+    function renderLR() {
+      const c = document.getElementById("lr-list");
+      c.innerHTML = "";
+      lrRecords.forEach(r => {
+        c.innerHTML += `
+          <div class="list-item">
+            <div class="li-icon" style="background:var(--blue-soft);">🎧</div>
+            <div class="li-content"><div class="li-title">${r.desc}</div><div class="li-sub">时长 ${r.time} 分钟</div></div>
+            <div class="li-right" style="color:#5a9cc4;">${r.time}min</div>
+          </div>`;
+      });
+    }
+    function addLR() {
+      const desc = document.getElementById("lr-desc").value.trim();
+      const time = Number(document.getElementById("lr-time").value);
+      if (!desc || !time) { alert("填写内容和时长～"); return; }
+      lrRecords.unshift({ desc, time });
+      DB.set("lrRecords", lrRecords);
+      document.getElementById("lr-desc").value = "";
+      document.getElementById("lr-time").value = "";
+      renderLR();
+    }
+    renderLR();
+  </script>
+</body>
+</html>

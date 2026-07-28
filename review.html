@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>月度复盘 | 成长工作台</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <script src="assets/common.js"></script>
+  <script>renderSidebar("review");</script>
+
+  <div class="main-content">
+    <div class="page-header">
+      <div class="page-title">📝 月度复盘报告</div>
+      <div class="page-subtitle">2026年7月 · 回望来路，更好前行</div>
+    </div>
+
+    <!-- 月度概览 -->
+    <div class="card" style="background:var(--grad-mint);border:none;">
+      <div style="text-align:center;padding:10px 0;">
+        <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">🌿 本月成长总分</div>
+        <div style="font-size:42px;font-weight:700;color:var(--green-deep);">82分</div>
+        <div style="font-size:12px;color:var(--text-muted);">比上月 ↑ 5分，继续加油！</div>
+      </div>
+    </div>
+
+    <!-- 存钱总结 -->
+    <div class="section-label">💰 存钱总结</div>
+    <div class="card">
+      <div class="grid-3" style="margin-bottom:16px;">
+        <div style="text-align:center;padding:14px;background:var(--green-soft);border-radius:12px;">
+          <div style="font-size:11px;color:var(--text-muted);">目标</div>
+          <div style="font-size:18px;font-weight:700;color:var(--green-deep);">¥1,667</div>
+        </div>
+        <div style="text-align:center;padding:14px;background:var(--green-soft);border-radius:12px;">
+          <div style="font-size:11px;color:var(--text-muted);">实际存</div>
+          <div style="font-size:18px;font-weight:700;color:var(--green-deep);">¥1,860</div>
+        </div>
+        <div style="text-align:center;padding:14px;background:var(--green-soft);border-radius:12px;">
+          <div style="font-size:11px;color:var(--text-muted);">达成率</div>
+          <div style="font-size:18px;font-weight:700;color:var(--green-deep);">112%</div>
+        </div>
+      </div>
+      <div style="background:var(--green-soft);border-radius:10px;padding:14px;font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <b style="color:var(--text);">✅ 做得好：</b>奶茶消费减半，食堂就餐率90%<br>
+        <b style="color:var(--text);">❌ 待改进：</b>外卖夜宵还有3次，网购多了点
+      </div>
+      <div class="input-row mt-16">
+        <label>下月存钱改进计划</label>
+        <textarea class="textarea" placeholder="写下你的计划...">外卖每月最多2次，卸载不必要的购物App，每天记账不偷懒</textarea>
+      </div>
+    </div>
+
+    <!-- 体重变化 -->
+    <div class="section-label">🌸 体重变化</div>
+    <div class="card">
+      <div class="grid-3" style="margin-bottom:16px;">
+        <div style="text-align:center;padding:14px;background:var(--pink-soft);border-radius:12px;">
+          <div style="font-size:11px;color:var(--text-muted);">月初</div>
+          <div style="font-size:18px;font-weight:700;color:#d97a85;">54.5kg</div>
+        </div>
+        <div style="text-align:center;padding:14px;background:var(--pink-soft);border-radius:12px;">
+          <div style="font-size:11px;color:var(--text-muted);">月末</div>
+          <div style="font-size:18px;font-weight:700;color:#d97a85;">53.2kg</div>
+        </div>
+        <div style="text-align:center;padding:14px;background:var(--pink-soft);border-radius:12px;">
+          <div style="font-size:11px;color:var(--text-muted);">减重</div>
+          <div style="font-size:18px;font-weight:700;color:#d97a85;">-1.3kg</div>
+        </div>
+      </div>
+      <canvas id="review-weight" style="width:100%;height:180px;"></canvas>
+      <div class="input-row mt-16">
+        <label>下月减脂目标 & 计划</label>
+        <textarea class="textarea" placeholder="下月目标体重 + 具体计划...">目标52.5kg，每周运动4次，加一组帕梅拉，控制每日热量1200内</textarea>
+      </div>
+    </div>
+
+    <!-- 英语成果 -->
+    <div class="section-label">📖 英语学习成果</div>
+    <div class="card">
+      <div class="grid-2" style="margin-bottom:16px;">
+        <div style="text-align:center;padding:14px;background:var(--blue-soft);border-radius:12px;">
+          <div style="font-size:11px;color:var(--text-muted);">本月学习</div>
+          <div style="font-size:20px;font-weight:700;color:#5a9cc4;">42小时</div>
+        </div>
+        <div style="text-align:center;padding:14px;background:var(--blue-soft);border-radius:12px;">
+          <div style="font-size:11px;color:var(--text-muted);">新增单词</div>
+          <div style="font-size:20px;font-weight:700;color:#5a9cc4;">1200个</div>
+        </div>
+      </div>
+      <div style="background:var(--blue-soft);border-radius:10px;padding:14px;font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <b style="color:var(--text);">📊 进度：</b>四级单词78%，真题做了12套<br>
+        <b style="color:var(--text);">⚠️ 弱项：</b>听力选择题失分多，翻译速度慢<br>
+        <b style="color:var(--text);">💪 亮点：</b>阅读理解正确率提升明显
+      </div>
+      <div class="input-row mt-16">
+        <label>下月英语计划</label>
+        <textarea class="textarea" placeholder="学习安排...">每天听力精听1篇，每周2套完整真题，口语练5次AI对话</textarea>
+      </div>
+    </div>
+
+    <!-- 爆款选题复盘 -->
+    <div class="section-label">✨ 爆款选题复盘</div>
+    <div class="card">
+      <div class="grid-3" style="margin-bottom:16px;">
+        <div style="text-align:center;padding:14px;background:var(--yellow-soft);border-radius:12px;">
+          <div style="font-size:11px;color:var(--text-muted);">采集数</div>
+          <div style="font-size:20px;font-weight:700;color:#c4a130;">42条</div>
+        </div>
+        <div style="text-align:center;padding:14px;background:var(--yellow-soft);border-radius:12px;">
+          <div style="font-size:11px;color:var(--text-muted);">已借鉴</div>
+          <div style="font-size:20px;font-weight:700;color:#c4a130;">8条</div>
+        </div>
+        <div style="text-align:center;padding:14px;background:var(--yellow-soft);border-radius:12px;">
+          <div style="font-size:11px;color:var(--text-muted);">发布数</div>
+          <div style="font-size:20px;font-weight:700;color:#c4a130;">5条</div>
+        </div>
+      </div>
+      <div style="background:var(--yellow-soft);border-radius:10px;padding:14px;font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <b style="color:var(--text);">🔥 最爆选题：</b>"大学生100元吃一周" → 点赞2.3w<br>
+        <b style="color:var(--text);">📈 规律发现：</b>食堂+省钱类选题互动最高<br>
+        <b style="color:var(--text);">🎯 下月方向：</b>宿舍美食系列 + 学习打卡系列
+      </div>
+      <div class="input-row mt-16">
+        <label>下月内容规划</label>
+        <textarea class="textarea" placeholder="下月想拍什么...">宿舍美食每周2更，四级备考vlog每周1更，尝试探店1次</textarea>
+      </div>
+    </div>
+
+    <!-- 月度心情 -->
+    <div class="section-label">🌙 本月心情记录</div>
+    <div class="card">
+      <div class="heatmap" id="mood-heatmap" style="grid-template-columns:repeat(10,1fr);"></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:14px;font-size:12px;color:var(--text-muted);flex-wrap:wrap;">
+        <span>低落</span>
+        <div style="width:14px;height:14px;border-radius:4px;background:var(--cream-deep);"></div>
+        <div style="width:14px;height:14px;border-radius:4px;background:var(--yellow);"></div>
+        <div style="width:14px;height:14px;border-radius:4px;background:var(--mint);"></div>
+        <div style="width:14px;height:14px;border-radius:4px;background:var(--green);"></div>
+        <span>开心</span>
+        <span style="margin-left:auto;">本月开心天数 <b class="text-green">22天</b> 🎉</span>
+      </div>
+    </div>
+
+    <!-- 下月寄语 -->
+    <div class="card" style="text-align:center;background:var(--grad-green);color:#fff;border:none;">
+      <div style="font-size:16px;font-weight:700;margin-bottom:8px;">🌻 致8月的自己</div>
+      <div style="font-size:13px;opacity:0.9;line-height:1.8;">
+        继续保持自律，温柔对待自己<br>
+        存钱、变美、学习、创作<br>
+        每一步都算数，8月也要闪闪发光 ✨
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 体重趋势
+    setTimeout(() => {
+      drawLine("review-weight", ["第1周","第2周","第3周","第4周"], [54.5, 54.1, 53.6, 53.2], "#ffb5ba", "#ffd6da");
+    }, 100);
+
+    // 心情热力图
+    const mc = document.getElementById("mood-heatmap");
+    const moodColors = ["var(--cream-deep)", "var(--yellow)", "var(--mint)", "var(--green)"];
+    for (let i = 0; i < 30; i++) {
+      const cell = document.createElement("div");
+      cell.className = "heat-cell";
+      const r = Math.random();
+      const idx = r > 0.75 ? 3 : r > 0.5 ? 2 : r > 0.25 ? 1 : 0;
+      cell.style.background = moodColors[idx];
+      mc.appendChild(cell);
+    }
+  </script>
+</body>
+</html>

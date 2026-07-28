@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>存钱记账 | 成长工作台</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <script src="assets/common.js"></script>
+  <script>renderSidebar("money");</script>
+
+  <div class="main-content">
+    <div class="page-header">
+      <div class="page-title">💰 存钱记账本</div>
+      <div class="page-subtitle">每一笔都在靠近想要的生活</div>
+    </div>
+
+    <!-- 月度看板 -->
+    <div class="card" style="background:var(--grad-green);color:#fff;border:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div>
+          <div style="font-size:12px;opacity:0.85;">本月结余</div>
+          <div style="font-size:32px;font-weight:700;" id="month-balance">¥1,860</div>
+        </div>
+        <div style="font-size:40px;">🐷</div>
+      </div>
+      <div style="display:flex;gap:12px;">
+        <div style="flex:1;background:rgba(255,255,255,0.15);border-radius:10px;padding:10px;">
+          <div style="font-size:11px;opacity:0.8;">本月收入</div>
+          <div style="font-size:18px;font-weight:700;" id="month-income">¥3,200</div>
+        </div>
+        <div style="flex:1;background:rgba(255,255,255,0.15);border-radius:10px;padding:10px;">
+          <div style="font-size:11px;opacity:0.8;">本月支出</div>
+          <div style="font-size:18px;font-weight:700;" id="month-expense">¥1,340</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 新增记账 -->
+    <div class="card">
+      <div class="card-title"><span class="title-icon">✍️</span>记一笔</div>
+      <div class="input-row">
+        <label>说明</label>
+        <input type="text" class="input" id="m-desc" placeholder="如：食堂午餐 / 兼职发传单">
+      </div>
+      <div class="grid-2">
+        <div class="input-row">
+          <label>金额</label>
+          <input type="number" class="input" id="m-amount" placeholder="¥">
+        </div>
+        <div class="input-row">
+          <label>类型</label>
+          <select class="select" id="m-type"><option>支出</option><option>收入</option></select>
+        </div>
+      </div>
+      <div class="input-row">
+        <label>分类</label>
+        <select class="select" id="m-cat">
+          <option>食堂</option><option>奶茶外卖</option><option>日用品</option>
+          <option>交通</option><option>学习</option><option>兼职收入</option><option>其他</option>
+        </select>
+      </div>
+      <button class="btn btn-green btn-full" onclick="addRecord()">+ 记一笔</button>
+    </div>
+
+    <!-- 支出分类统计 -->
+    <div class="card">
+      <div class="card-title"><span class="title-icon">📊</span>本月支出分类</div>
+      <div id="cat-stats"></div>
+    </div>
+
+    <!-- 收支明细 -->
+    <div class="card">
+      <div class="card-title"><span class="title-icon">📋</span>收支明细</div>
+      <div id="record-list"></div>
+    </div>
+
+    <!-- 存钱目标拆解 -->
+    <div class="card">
+      <div class="card-title"><span class="title-icon">🎯</span>存钱目标拆解</div>
+      <div style="margin-bottom:14px;">
+        <div class="flex-between" style="margin-bottom:6px;font-size:13px;">
+          <span>年度目标 ¥20,000</span><span class="text-green font-bold" id="save-pct">43%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="save-bar" style="width:43%;"></div></div>
+      </div>
+      <div class="grid-3" style="margin-top:16px;">
+        <div style="text-align:center;padding:12px;background:var(--green-soft);border-radius:10px;">
+          <div style="font-size:11px;color:var(--text-muted);">每月需存</div>
+          <div style="font-size:16px;font-weight:700;color:var(--green-deep);">¥1,667</div>
+        </div>
+        <div style="text-align:center;padding:12px;background:var(--green-soft);border-radius:10px;">
+          <div style="font-size:11px;color:var(--text-muted);">已存</div>
+          <div style="font-size:16px;font-weight:700;color:var(--green-deep);">¥8,600</div>
+        </div>
+        <div style="text-align:center;padding:12px;background:var(--green-soft);border-radius:10px;">
+          <div style="font-size:11px;color:var(--text-muted);">剩余</div>
+          <div style="font-size:16px;font-weight:700;color:var(--green-deep);">¥11,400</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 月度复盘 -->
+    <div class="card">
+      <div class="card-title"><span class="title-icon">📝</span>本月存钱复盘</div>
+      <div class="input-row">
+        <label>这月做得好的地方</label>
+        <textarea class="textarea" placeholder="比如：奶茶只喝了3次，比上月少了一半～">奶茶控制得不错，食堂吃饭也很规律</textarea>
+      </div>
+      <div class="input-row">
+        <label>下月改进</label>
+        <textarea class="textarea" placeholder="比如：减少外卖，多去图书馆">减少外卖夜宵，争取每月多存200</textarea>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let records = DB.get("moneyRecords", [
+      { desc:"食堂午餐", amount:12, type:"支出", cat:"食堂" },
+      { desc:"兼职发传单", amount:200, type:"收入", cat:"兼职收入" },
+      { desc:"奶茶一杯", amount:18, type:"支出", cat:"奶茶外卖" },
+      { desc:todayStr()+" 食堂晚餐", amount:10, type:"支出", cat:"食堂" },
+      { desc:"文具笔记本", amount:25, type:"支出", cat:"学习" },
+      { desc:"地铁出行", amount:6, type:"支出", cat:"交通" },
+    ]);
+
+    function render() {
+      const list = document.getElementById("record-list");
+      list.innerHTML = "";
+      let income = 0, expense = 0;
+      const cats = {};
+
+      records.forEach((r,i) => {
+        if (r.type === "收入") income += r.amount;
+        else { expense += r.amount; cats[r.cat] = (cats[r.cat]||0) + r.amount; }
+        const tCls = r.type==="收入" ? "tag-green" : "tag-pink";
+        list.innerHTML += `
+          <div class="list-item">
+            <div class="li-icon" style="background:${r.type==='收入'?'var(--green-light)':'var(--pink-soft)'};">${r.type==='收入'?'💵':'🧾'}</div>
+            <div class="li-content">
+              <div class="li-title">${r.desc}</div>
+              <div class="li-sub"><span class="tag ${tCls}">${r.type}</span> <span class="tag tag-gray">${r.cat}</span></div>
+            </div>
+            <div class="li-right" style="color:${r.type==='收入'?'var(--green-deep)':'#d97a85'}">${r.type==='收入'?'+':'-'}¥${r.amount}</div>
+          </div>`;
+      });
+
+      document.getElementById("month-income").textContent = "¥" + income.toLocaleString();
+      document.getElementById("month-expense").textContent = "¥" + expense.toLocaleString();
+      document.getElementById("month-balance").textContent = "¥" + (income-expense).toLocaleString();
+
+      // 分类统计
+      const cs = document.getElementById("cat-stats");
+      const totalExp = expense || 1;
+      const colors = ["#7dc892","#ffb5ba","#a3d5f0","#ffe8a3","#ffcba4","#d4f1dd"];
+      let html = "";
+      Object.entries(cats).sort((a,b)=>b[1]-a[1]).forEach(([cat,amt],i) => {
+        const pct = (amt/totalExp*100).toFixed(0);
+        html += `
+          <div style="margin-bottom:12px;">
+            <div class="flex-between" style="margin-bottom:5px;font-size:13px;">
+              <span>${cat}</span><span class="text-green font-bold">¥${amt} · ${pct}%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${colors[i%colors.length]};"></div></div>
+          </div>`;
+      });
+      cs.innerHTML = html || '<div class="text-muted text-center">暂无支出记录</div>';
+    }
+
+    function addRecord() {
+      const desc = document.getElementById("m-desc").value.trim();
+      const amount = Number(document.getElementById("m-amount").value);
+      const type = document.getElementById("m-type").value;
+      const cat = document.getElementById("m-cat").value;
+      if (!desc || !amount) { alert("填写说明和金额哦～"); return; }
+      records.unshift({ desc, amount, type, cat });
+      DB.set("moneyRecords", records);
+      document.getElementById("m-desc").value = "";
+      document.getElementById("m-amount").value = "";
+      render();
+    }
+
+    render();
+  </script>
+</body>
+</html>

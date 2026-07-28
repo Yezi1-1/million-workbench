@@ -1,12 +1,12 @@
 {
-  "name": "百万搞钱工作台",
-  "short_name": "百万工作台",
-  "description": "1年100万目标管控系统 · 深色黑金商务风格",
-  "start_url": "./index.html",
+  "name": "女生成长工作台",
+  "short_name": "成长工作台",
+  "description": "20岁在校女生自律成长+自媒体灵感工作台",
+  "start_url": "index.html",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0a0a0a",
-  "theme_color": "#d4af37",
+  "background_color": "#faf8f3",
+  "theme_color": "#7dc892",
   "icons": [
     {
       "src": "icon-192.png",

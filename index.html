@@ -3,737 +3,138 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>百万搞钱工作台</title>
+  <title>成长工作台 | 首页</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#6c5ce7">
+  <meta name="theme-color" content="#7dc892">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="百万工作台">
+  <meta name="apple-mobile-web-app-title" content="成长工作台">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
   <script src="assets/common.js"></script>
-  <script>renderHeader();</script>
+  <script>renderSidebar("dashboard");</script>
 
-  <!-- ====== 页面1：数据仪表盘 ====== -->
-  <div class="page active" id="page-dashboard">
-    <div class="gradient-card" style="background:var(--gradient-primary);">
-      <div class="gc-label">年度目标完成进度</div>
-      <div class="gc-value" onclick="editField('totalIncome','当前累计收入',384200,'number')" style="cursor:pointer;">¥384,200 <span style="font-size:14px;opacity:0.7;">/ ¥1,000,000</span></div>
-      <div class="gc-sub">已过 187天 / 365天 · 日均 ¥2,055</div>
-      <div style="margin-top:12px;">
-        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;opacity:0.9;">
-          <span>38.4% 完成</span><span>缺口 ¥615,800</span>
-        </div>
-        <div style="height:8px;background:rgba(255,255,255,0.2);border-radius:4px;overflow:hidden;">
-          <div style="height:100%;width:38.4%;background:#fff;border-radius:4px;"></div>
-        </div>
+  <div class="main-content">
+    <!-- 问候卡 -->
+    <div class="greeting-card">
+      <div class="g-text">
+        <div class="hello">早上好呀 ☀️</div>
+        <div class="name">小叶子，今天也要闪闪发光</div>
+        <div class="quote">"自律给我自由，温柔也有力量"</div>
       </div>
+      <div class="g-emoji">🌷</div>
     </div>
 
+    <!-- 四大核心指标 -->
     <div class="metric-grid">
-      <div class="metric-item">
-        <div class="icon-circle" style="background:#e6f9f3;">💰</div>
-        <div class="label">本月收入</div>
-        <div class="value" style="color:var(--green)">¥52,300</div>
-        <div class="delta up">↑ 18.5%</div>
+      <div class="metric-card" onclick="editValue('saveGoal','年度攒钱目标',20000,'number')" style="cursor:pointer;">
+        <div class="mc-icon" style="background:var(--green-light);">💰</div>
+        <div class="mc-label">年度攒钱目标</div>
+        <div class="mc-value" style="color:var(--green-deep)" id="save-goal-display">¥20,000</div>
+        <div class="mc-sub">当前 <b style="color:var(--green-deep)" id="save-current-display">¥8,600</b> · 43%</div>
       </div>
-      <div class="metric-item">
-        <div class="icon-circle" style="background:#fdeaea;">💸</div>
-        <div class="label">本月支出</div>
-        <div class="value" style="color:var(--red)">¥8,200</div>
-        <div class="delta down">↓ 5.2%</div>
+      <div class="metric-card" onclick="editValue('weightGoal','目标体重',50,'number')" style="cursor:pointer;">
+        <div class="mc-icon" style="background:var(--pink-soft);">🌸</div>
+        <div class="mc-label">减肥目标</div>
+        <div class="mc-value" style="color:#d97a85" id="weight-goal-display">50.0kg</div>
+        <div class="mc-sub">当前 <b style="color:#d97a85" id="weight-current-display">53.2kg</b> · 打卡23天</div>
       </div>
-      <div class="metric-item">
-        <div class="icon-circle" style="background:#eeeafe;">📈</div>
-        <div class="label">本月利润</div>
-        <div class="value" style="color:var(--purple)">¥44,100</div>
-        <div class="delta up">↑ 24.1%</div>
+      <div class="metric-card" onclick="editValue('englishGoal','四六级备考进度',75,'number')" style="cursor:pointer;">
+        <div class="mc-icon" style="background:var(--blue-soft);">📖</div>
+        <div class="mc-label">英语学习</div>
+        <div class="mc-value" style="color:#5a9cc4" id="english-progress">75%</div>
+        <div class="mc-sub">累计 <b style="color:#5a9cc4">186</b>小时 · 连续15天</div>
       </div>
-      <div class="metric-item">
-        <div class="icon-circle" style="background:#e3f0fc;">👥</div>
-        <div class="label">成交客户</div>
-        <div class="value" style="color:var(--blue)">127</div>
-        <div class="delta up">↑ 12 新增</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">📊 月度收益趋势</div>
-      <canvas id="income-trend" style="width:100%;height:200px;"></canvas>
-    </div>
-
-    <div class="card">
-      <div class="card-title">🎯 三大赛道进度</div>
-      <div style="margin-bottom:14px;">
-        <div class="flex-between" style="margin-bottom:6px;font-size:13px;">
-          <span>🟣 知识付费</span><span class="text-purple font-bold">¥168,000 / 40万</span>
-        </div>
-        <div class="progress-bar"><div class="progress-fill primary" style="width:42%;"></div></div>
-      </div>
-      <div style="margin-bottom:14px;">
-        <div class="flex-between" style="margin-bottom:6px;font-size:13px;">
-          <span>🔵 电商带货</span><span style="color:var(--blue)" class="font-bold">¥132,500 / 35万</span>
-        </div>
-        <div class="progress-bar"><div class="progress-fill" style="width:37.8%;background:var(--gradient-blue);"></div></div>
-      </div>
-      <div style="margin-bottom:0;">
-        <div class="flex-between" style="margin-bottom:6px;font-size:13px;">
-          <span>🟠 自媒体广告</span><span style="color:var(--orange)" class="font-bold">¥83,700 / 25万</span>
-        </div>
-        <div class="progress-bar"><div class="progress-fill orange" style="width:33.5%;"></div></div>
+      <div class="metric-card">
+        <div class="mc-icon" style="background:var(--yellow-soft);">✨</div>
+        <div class="mc-label">今日爆款采集</div>
+        <div class="mc-value" style="color:#c4a130">8条</div>
+        <div class="mc-sub">本周累计 <b style="color:#c4a130">42</b>条</div>
       </div>
     </div>
 
+    <!-- 环形进度 -->
     <div class="card">
-      <div class="card-title">🔥 执行活跃度（近60天）</div>
-      <div class="heatmap" id="heatmap"></div>
-      <div style="display:flex;align-items:center;gap:6px;margin-top:12px;font-size:11px;color:var(--text-muted);">
-        <span>少</span>
-        <div class="heat-cell" style="width:12px;height:12px;"></div>
-        <div class="heat-cell heat-1" style="width:12px;height:12px;"></div>
-        <div class="heat-cell heat-2" style="width:12px;height:12px;"></div>
-        <div class="heat-cell heat-3" style="width:12px;height:12px;"></div>
-        <div class="heat-cell heat-4" style="width:12px;height:12px;"></div>
-        <span>多</span>
-        <span style="margin-left:auto;">连续打卡 <b class="text-purple">23</b> 天</span>
+      <div class="card-title"><span class="title-icon">🎯</span>本月目标进度</div>
+      <div style="display:flex;justify-content:space-around;flex-wrap:wrap;gap:16px;">
+        <div>
+          <canvas id="ring-save" class="ring-canvas"></canvas>
+        </div>
+        <div>
+          <canvas id="ring-weight" class="ring-canvas"></canvas>
+        </div>
+        <div>
+          <canvas id="ring-english" class="ring-canvas"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- 周打卡热力图 -->
+    <div class="card">
+      <div class="card-title"><span class="title-icon">🔥</span>本周打卡热力图</div>
+      <div class="heatmap" id="week-heatmap"></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:14px;font-size:12px;color:var(--text-muted);">
+        <span>未完成</span>
+        <div class="heat-cell" style="width:14px;height:14px;"></div>
+        <div class="heat-cell heat-done" style="width:14px;height:14px;"></div>
+        <div class="heat-cell heat-done-2" style="width:14px;height:14px;"></div>
+        <span>已完成</span>
+        <span style="margin-left:auto;">连续打卡 <b style="color:var(--green-deep)">23</b> 天 🎉</span>
+      </div>
+    </div>
+
+    <!-- 快捷入口 -->
+    <div class="section-label">🚀 快捷入口</div>
+    <div class="grid-2">
+      <div class="list-item" onclick="go('money')" style="cursor:pointer;">
+        <div class="li-icon" style="background:var(--green-light);">💰</div>
+        <div class="li-content"><div class="li-title">记一笔</div><div class="li-sub">今天的收支</div></div>
+        <div class="li-right">→</div>
+      </div>
+      <div class="list-item" onclick="go('fitness')" style="cursor:pointer;">
+        <div class="li-icon" style="background:var(--pink-soft);">🌸</div>
+        <div class="li-content"><div class="li-title">体重打卡</div><div class="li-sub">记录今日体重</div></div>
+        <div class="li-right">→</div>
+      </div>
+      <div class="list-item" onclick="go('english')" style="cursor:pointer;">
+        <div class="li-icon" style="background:var(--blue-soft);">📖</div>
+        <div class="li-content"><div class="li-title">背单词</div><div class="li-sub">今日单词打卡</div></div>
+        <div class="li-right">→</div>
+      </div>
+      <div class="list-item" onclick="go('trending')" style="cursor:pointer;">
+        <div class="li-icon" style="background:var(--yellow-soft);">✨</div>
+        <div class="li-content"><div class="li-title">采集爆款</div><div class="li-sub">刷到好内容</div></div>
+        <div class="li-right">→</div>
       </div>
     </div>
   </div>
-
-  <!-- ====== 页面2：赛道规划 ====== -->
-  <div class="page" id="page-tracks">
-    <div class="page-title">变现赛道规划</div>
-    <div class="page-subtitle">3条盈利赛道 · 点击数字可编辑</div>
-
-    <!-- 赛道1 -->
-    <div class="gradient-card" style="background:var(--gradient-primary);">
-      <div class="gc-label">🟣 赛道一 · 知识付费</div>
-      <div class="gc-value">¥548,450</div>
-      <div class="gc-sub">课程 + 咨询 · 高客单高利润</div>
-    </div>
-    <div class="card">
-      <div class="card-title">💰 定价与收入测算</div>
-      <div class="list-item">
-        <div class="li-icon" style="background:#eeeafe;">📖</div>
-        <div class="li-content"><div class="li-title">录播课 ¥199</div><div class="li-sub">800人 × ¥199</div></div>
-        <div class="li-right text-purple">¥159K</div>
-      </div>
-      <div class="list-item">
-        <div class="li-icon" style="background:#eeeafe;">🎓</div>
-        <div class="li-content"><div class="li-title">训练营 ¥999</div><div class="li-sub">150人 × ¥999</div></div>
-        <div class="li-right text-purple">¥150K</div>
-      </div>
-      <div class="list-item">
-        <div class="li-icon" style="background:#eeeafe;">💬</div>
-        <div class="li-content"><div class="li-title">1v1咨询 ¥3,000</div><div class="li-sub">40人 × ¥3,000</div></div>
-        <div class="li-right text-purple">¥120K</div>
-      </div>
-      <div class="list-item">
-        <div class="li-icon" style="background:#eeeafe;">🔄</div>
-        <div class="li-content"><div class="li-title">年会员 ¥1,999</div><div class="li-sub">50人 × ¥1,999</div></div>
-        <div class="li-right text-purple">¥100K</div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">📢 获客方式</div>
-      <div style="font-size:13px;color:var(--text-secondary);line-height:2;">
-        <div>📱 小红书/抖音知识口播 → 引流</div>
-        <div>📝 公众号深度文章 + 裂变海报</div>
-        <div>🎥 免费公开课/直播 → 高价转化</div>
-        <div>🤝 老客户转介绍（5%佣金）</div>
-      </div>
-    </div>
-
-    <!-- 赛道2 -->
-    <div class="gradient-card" style="background:var(--gradient-blue);">
-      <div class="gc-label">🔵 赛道二 · 电商带货</div>
-      <div class="gc-value">¥400,000</div>
-      <div class="gc-sub">选品分销 + 直播带货</div>
-    </div>
-    <div class="card">
-      <div class="card-title">💰 收入测算</div>
-      <div class="list-item">
-        <div class="li-icon" style="background:#e3f0fc;">🛒</div>
-        <div class="li-content"><div class="li-title">分销佣金</div><div class="li-sub">GMV 80万 × 22%</div></div>
-        <div class="li-right" style="color:var(--blue)">¥176K</div>
-      </div>
-      <div class="list-item">
-        <div class="li-icon" style="background:#e3f0fc;">📦</div>
-        <div class="li-content"><div class="li-title">自营毛利</div><div class="li-sub">GMV 40万 × 40%</div></div>
-        <div class="li-right" style="color:var(--blue)">¥160K</div>
-      </div>
-      <div class="list-item">
-        <div class="li-icon" style="background:#e3f0fc;">🏬</div>
-        <div class="li-content"><div class="li-title">团购接单</div><div class="li-sub">50单 × ¥800</div></div>
-        <div class="li-right" style="color:var(--blue)">¥40K</div>
-      </div>
-    </div>
-
-    <!-- 赛道3 -->
-    <div class="gradient-card" style="background:var(--gradient-orange);">
-      <div class="gc-label">🟠 赛道三 · 自媒体广告</div>
-      <div class="gc-value">¥280,000</div>
-      <div class="gc-sub">流量变现 + 品牌合作</div>
-    </div>
-    <div class="card">
-      <div class="card-title">💰 收入测算</div>
-      <div class="list-item">
-        <div class="li-icon" style="background:#fef0eb;">📺</div>
-        <div class="li-content"><div class="li-title">平台分成</div><div class="li-sub">西瓜/B站/油管</div></div>
-        <div class="li-right" style="color:var(--orange)">¥48K</div>
-      </div>
-      <div class="list-item">
-        <div class="li-icon" style="background:#fef0eb;">📣</div>
-        <div class="li-content"><div class="li-title">品牌广告</div><div class="li-sub">40条 × ¥4,000</div></div>
-        <div class="li-right" style="color:var(--orange)">¥160K</div>
-      </div>
-      <div class="list-item">
-        <div class="li-icon" style="background:#fef0eb;">📝</div>
-        <div class="li-content"><div class="li-title">软文种草</div><div class="li-sub">30篇 × ¥1,500</div></div>
-        <div class="li-right" style="color:var(--orange)">¥45K</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ====== 页面3：财务记账 ====== -->
-  <div class="page" id="page-finance">
-    <div class="page-title">财务记账</div>
-    <div class="page-subtitle">收入 · 支出 · 利润 自动统计</div>
-
-    <div class="metric-grid">
-      <div class="metric-item">
-        <div class="label">年度总收入</div>
-        <div class="value" style="color:var(--green)">¥384K</div>
-      </div>
-      <div class="metric-item">
-        <div class="label">年度总支出</div>
-        <div class="value" style="color:var(--red)">¥62.8K</div>
-      </div>
-      <div class="metric-item">
-        <div class="label">年度净利润</div>
-        <div class="value" style="color:var(--purple)">¥321K</div>
-      </div>
-      <div class="metric-item">
-        <div class="label">利润率</div>
-        <div class="value">83.6%</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">➕ 新增记账</div>
-      <div class="input-row">
-        <label>说明</label>
-        <input type="text" class="input" id="fin-desc" placeholder="如：训练营第3期">
-      </div>
-      <div style="display:flex;gap:12px;">
-        <div class="input-row" style="flex:1;">
-          <label>金额</label>
-          <input type="number" class="input" id="fin-amount" placeholder="¥">
-        </div>
-        <div class="input-row" style="flex:1;">
-          <label>类型</label>
-          <select class="select" id="fin-type"><option value="收入">收入</option><option value="支出">支出</option></select>
-        </div>
-      </div>
-      <div class="input-row">
-        <label>赛道</label>
-        <select class="select" id="fin-track">
-          <option>知识付费</option><option>电商带货</option><option>自媒体</option><option>通用</option>
-        </select>
-      </div>
-      <button class="btn btn-primary" onclick="addRecord()">+ 记一笔</button>
-    </div>
-
-    <div class="card">
-      <div class="card-title">📋 收支明细</div>
-      <div id="finance-list"></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">📊 月度收支对比</div>
-      <canvas id="month-chart" style="width:100%;height:200px;"></canvas>
-    </div>
-  </div>
-
-  <!-- ====== 页面4：客户CRM ====== -->
-  <div class="page" id="page-crm">
-    <div class="page-title">客户管理</div>
-    <div class="page-subtitle">线索 → 意向 → 成交 → 售后</div>
-
-    <div class="metric-grid">
-      <div class="metric-item" style="text-align:center;">
-        <div class="icon-circle" style="background:#e3f0fc;margin:0 auto 8px;">📋</div>
-        <div class="value" style="color:var(--blue)">186</div>
-        <div class="label">线索</div>
-      </div>
-      <div class="metric-item" style="text-align:center;">
-        <div class="icon-circle" style="background:#fef0eb;margin:0 auto 8px;">💬</div>
-        <div class="value" style="color:var(--orange)">65</div>
-        <div class="label">意向</div>
-      </div>
-      <div class="metric-item" style="text-align:center;">
-        <div class="icon-circle" style="background:#e6f9f3;margin:0 auto 8px;">✅</div>
-        <div class="value" style="color:var(--green)">127</div>
-        <div class="label">成交</div>
-      </div>
-      <div class="metric-item" style="text-align:center;">
-        <div class="icon-circle" style="background:#eeeafe;margin:0 auto 8px;">🌟</div>
-        <div class="value" style="color:var(--purple)">89</div>
-        <div class="label">复购</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">➕ 新增客户</div>
-      <div class="input-row">
-        <label>客户姓名</label>
-        <input type="text" class="input" id="crm-name" placeholder="客户名">
-      </div>
-      <div style="display:flex;gap:12px;">
-        <div class="input-row" style="flex:1;">
-          <label>来源</label>
-          <select class="select" id="crm-source">
-            <option>小红书</option><option>抖音</option><option>公众号</option><option>直播</option><option>转介绍</option>
-          </select>
-        </div>
-        <div class="input-row" style="flex:1;">
-          <label>阶段</label>
-          <select class="select" id="crm-stage">
-            <option>线索</option><option>意向</option><option>成交</option><option>售后</option>
-          </select>
-        </div>
-      </div>
-      <div class="input-row">
-        <label>赛道</label>
-        <select class="select" id="crm-track"><option>知识付费</option><option>电商带货</option><option>自媒体</option></select>
-      </div>
-      <button class="btn btn-primary" onclick="addCustomer()">+ 添加客户</button>
-    </div>
-
-    <div class="card">
-      <div class="card-title">👥 客户列表</div>
-      <div id="crm-list"></div>
-    </div>
-  </div>
-
-  <!-- ====== 页面5：每日打卡（更多） ====== -->
-  <div class="page" id="page-daily">
-    <div class="gradient-card" style="background:var(--gradient-warm);">
-      <div class="gc-label">✅ 今日赚钱挑战</div>
-      <div class="gc-value" style="font-size:36px;">5/8</div>
-      <div class="gc-sub">完成今日任务 · 目标收入 ¥2,740</div>
-    </div>
-
-    <div class="ring-wrap">
-      <canvas id="daily-ring" class="ring-canvas"></canvas>
-    </div>
-
-    <div class="metric-grid">
-      <div class="metric-item" style="text-align:center;">
-        <div class="value" style="color:var(--orange)">23</div>
-        <div class="label">🔥 连续打卡</div>
-      </div>
-      <div class="metric-item" style="text-align:center;">
-        <div class="value" style="color:var(--green)">187</div>
-        <div class="label">📅 累计天数</div>
-      </div>
-    </div>
-
-    <div class="section-label">📋 今日任务清单</div>
-    <div id="task-list"></div>
-
-    <div class="section-label">🎯 本周重点目标</div>
-    <div id="weekly-list"></div>
-
-    <div class="section-label">🔄 每日习惯</div>
-    <div id="habit-list"></div>
-  </div>
-
-  <!-- ====== 页面6：月度复盘（更多） ====== -->
-  <div class="page" id="page-review">
-    <div class="page-title">月度复盘</div>
-    <div class="page-subtitle">2026年7月 · 数据驱动持续优化</div>
-
-    <div class="metric-grid">
-      <div class="metric-item">
-        <div class="label">本月收入</div>
-        <div class="value" style="color:var(--purple)">¥52.3K</div>
-        <div class="delta up">↑ 18.5%</div>
-      </div>
-      <div class="metric-item">
-        <div class="label">月度目标</div>
-        <div class="value">¥83.3K</div>
-        <div class="delta">100万÷12</div>
-      </div>
-      <div class="metric-item">
-        <div class="label">完成率</div>
-        <div class="value" style="color:var(--red)">62.8%</div>
-        <div class="delta down">缺口 ¥31K</div>
-      </div>
-      <div class="metric-item">
-        <div class="label">年度累计</div>
-        <div class="value">¥384K</div>
-        <div class="delta">目标38.4%</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">🔍 缺口分析</div>
-      <div style="margin-bottom:14px;">
-        <div class="flex-between" style="margin-bottom:6px;font-size:13px;">
-          <span>知识付费</span><span class="text-red font-bold">66.8% · 缺¥12K</span>
-        </div>
-        <div class="progress-bar"><div class="progress-fill" style="width:66.8%;background:var(--gradient-primary);"></div></div>
-      </div>
-      <div style="margin-bottom:14px;">
-        <div class="flex-between" style="margin-bottom:6px;font-size:13px;">
-          <span>电商带货</span><span class="text-red font-bold">62.4% · 缺¥11K</span>
-        </div>
-        <div class="progress-bar"><div class="progress-fill" style="width:62.4%;background:var(--gradient-blue);"></div></div>
-      </div>
-      <div>
-        <div class="flex-between" style="margin-bottom:6px;font-size:13px;">
-          <span>自媒体</span><span class="text-red font-bold">54.9% · 缺¥8K</span>
-        </div>
-        <div class="progress-bar"><div class="progress-fill orange" style="width:54.9%;"></div></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">📈 近6月趋势</div>
-      <canvas id="review-trend" style="width:100%;height:200px;"></canvas>
-    </div>
-
-    <div class="card">
-      <div class="card-title">✓ 做得好的</div>
-      <div style="font-size:13px;color:var(--text-secondary);line-height:2;">
-        <div>✅ 训练营复购率达70%，老客户信任度高</div>
-        <div>✅ 小红书引流效果好，单篇32条线索</div>
-        <div>✅ 1v1咨询转化率45%，应增加高客单</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">✗ 待改进的</div>
-      <div style="font-size:13px;color:var(--text-secondary);line-height:2;">
-        <div>❌ 直播频次不足(仅2场)</div>
-        <div>❌ 广告过于依赖平台分成</div>
-        <div>❌ 客户跟进SOP缺失，流失率55%</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">🚀 8月优化计划</div>
-      <div class="list-item">
-        <div class="li-icon" style="background:var(--primary-bg);color:var(--purple);">1</div>
-        <div class="li-content"><div class="li-title">直播带货提升</div><div class="li-sub">每周3场 · GMV目标¥30K</div></div>
-      </div>
-      <div class="list-item">
-        <div class="li-icon" style="background:var(--primary-bg);color:var(--purple);">2</div>
-        <div class="li-content"><div class="li-title">训练营第4期提速</div><div class="li-sub">8/1开启 · 目标15人</div></div>
-      </div>
-      <div class="list-item">
-        <div class="li-icon" style="background:var(--primary-bg);color:var(--purple);">3</div>
-        <div class="li-content"><div class="li-title">客户跟进SOP</div><div class="li-sub">3-7-15天节奏 · 转化55%</div></div>
-      </div>
-      <div class="list-item">
-        <div class="li-icon" style="background:var(--primary-bg);color:var(--purple);">4</div>
-        <div class="li-content"><div class="li-title">自媒体主动接单</div><div class="li-sub">蒲公英+星图 · ¥12K</div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ====== 页面7：资源库（更多） ====== -->
-  <div class="page" id="page-resources">
-    <div class="page-title">资源库</div>
-    <div class="page-subtitle">话术 · 素材 · 工具 · 模板</div>
-
-    <div class="section-label">💬 话术库</div>
-    <div class="card">
-      <div class="card-title">🎯 意向客户首次触达</div>
-      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;background:var(--bg-input);padding:14px;border-radius:10px;">
-        你好呀！看到你关注了<strong style="color:var(--text);">{赛道/痛点}</strong>方面的内容，我是专门做这块的。<br><br>
-        目前有一个<strong style="color:var(--text);">免费试听课</strong>，很多类似朋友都拿到了不错成果，要不要试试看？😊
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">💰 训练营成交转化</div>
-      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;background:var(--bg-input);padding:14px;border-radius:10px;">
-        咱们训练营还剩<strong style="color:var(--text);">3个名额</strong>，今晚截止早鸟价。<br><br>
-        ① <strong style="color:var(--text);">7天系统课</strong> + 答疑社群<br>
-        ② <strong style="color:var(--text);">1v1诊断</strong>（价值¥1000）<br>
-        ③ 结业<strong style="color:var(--text);">资源对接</strong> + 转介绍佣金<br><br>
-        原价¥999，早鸟价<strong style="color:var(--purple);">¥799</strong>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">🔄 老客户复购续费</div>
-      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;background:var(--bg-input);padding:14px;border-radius:10px;">
-        训练营学完一段时间了，最近实操还顺利吗？<br><br>
-        <strong style="color:var(--text);">年度会员社群</strong>开放了：每周案例拆解 + 资源对接 + 月度直播。老学员专享 <strong style="color:var(--purple);">¥199/月</strong>
-      </div>
-    </div>
-
-    <div class="section-label">🔧 常用工具</div>
-    <div class="list-item" onclick="window.open('https://www.feigua.cn')" style="cursor:pointer;">
-      <div class="li-icon" style="background:#e3f0fc;">📊</div>
-      <div class="li-content"><div class="li-title">飞瓜数据</div><div class="li-sub">抖音电商数据分析</div></div>
-      <div class="li-right">→</div>
-    </div>
-    <div class="list-item" onclick="window.open('https://www.qian-gua.com')" style="cursor:pointer;">
-      <div class="li-icon" style="background:#fde8f0;">📈</div>
-      <div class="li-content"><div class="li-title">千瓜数据</div><div class="li-sub">小红书数据分析</div></div>
-      <div class="li-right">→</div>
-    </div>
-    <div class="list-item" onclick="window.open('https://www.capcut.com')" style="cursor:pointer;">
-      <div class="li-icon" style="background:#fef0eb;">🎬</div>
-      <div class="li-content"><div class="li-title">剪映 CapCut</div><div class="li-sub">短视频剪辑工具</div></div>
-      <div class="li-right">→</div>
-    </div>
-    <div class="list-item" onclick="window.open('https://www.canva.cn')" style="cursor:pointer;">
-      <div class="li-icon" style="background:#eeeafe;">🎨</div>
-      <div class="li-content"><div class="li-title">Canva 可画</div><div class="li-sub">在线设计工具</div></div>
-      <div class="li-right">→</div>
-    </div>
-    <div class="list-item" onclick="window.open('https://chat.openai.com')" style="cursor:pointer;">
-      <div class="li-icon" style="background:#e6f9f3;">🤖</div>
-      <div class="li-content"><div class="li-title">ChatGPT / Claude</div><div class="li-sub">AI辅助内容创作</div></div>
-      <div class="li-right">→</div>
-    </div>
-    <div class="list-item" onclick="window.open('https://www.1688.com')" style="cursor:pointer;">
-      <div class="li-icon" style="background:#e3f0fc;">🛒</div>
-      <div class="li-content"><div class="li-title">1688 / 精选联盟</div><div class="li-sub">选品采购分销</div></div>
-      <div class="li-right">→</div>
-    </div>
-
-    <div class="section-label">📄 模板文档</div>
-    <div class="list-item">
-      <div class="li-icon" style="background:var(--primary-bg);">📋</div>
-      <div class="li-content"><div class="li-title">客户画像分析模板</div><div class="li-sub">标准化客户画像表</div></div>
-    </div>
-    <div class="list-item">
-      <div class="li-icon" style="background:var(--primary-bg);">💰</div>
-      <div class="li-content"><div class="li-title">定价策略计算表</div><div class="li-sub">自动计算客单价与利润率</div></div>
-    </div>
-    <div class="list-item">
-      <div class="li-icon" style="background:var(--primary-bg);">📅</div>
-      <div class="li-content"><div class="li-title">内容排期表模板</div><div class="li-sub">7天发布日历</div></div>
-    </div>
-    <div class="list-item">
-      <div class="li-icon" style="background:var(--primary-bg);">📊</div>
-      <div class="li-content"><div class="li-title">直播带货脚本</div><div class="li-sub">全流程话术+时间节点</div></div>
-    </div>
-  </div>
-
-  <!-- ====== 更多菜单入口 ====== -->
-  <div class="page" id="page-more">
-    <div class="page-title">更多功能</div>
-    <div class="page-subtitle">点击进入对应功能</div>
-
-    <div class="list-item" onclick="switchSub('daily')" style="cursor:pointer;">
-      <div class="li-icon" style="background:var(--gradient-warm);color:#fff;">✅</div>
-      <div class="li-content"><div class="li-title">每日执行打卡</div><div class="li-sub">今日任务 · 习惯打卡 · 周目标</div></div>
-      <div class="li-right">→</div>
-    </div>
-    <div class="list-item" onclick="switchSub('review')" style="cursor:pointer;">
-      <div class="li-icon" style="background:var(--gradient-primary);color:#fff;">📈</div>
-      <div class="li-content"><div class="li-title">月度复盘</div><div class="li-sub">营收复盘 · 缺口分析 · 优化计划</div></div>
-      <div class="li-right">→</div>
-    </div>
-    <div class="list-item" onclick="switchSub('resources')" style="cursor:pointer;">
-      <div class="li-icon" style="background:var(--gradient-orange);color:#fff;">📚</div>
-      <div class="li-content"><div class="li-title">资源库</div><div class="li-sub">话术 · 素材 · 工具 · 模板</div></div>
-      <div class="li-right">→</div>
-    </div>
-
-    <div class="section-label">⚙️ 设置</div>
-    <div class="card" style="text-align:center;">
-      <div style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">数据自动保存在本地浏览器</div>
-      <button class="btn btn-outline" onclick="if(confirm('确定重置所有数据？')){localStorage.clear();location.reload();}">🗑️ 重置所有数据</button>
-    </div>
-    <div style="text-align:center;font-size:12px;color:var(--text-muted);margin-top:20px;">
-      百万搞钱工作台 v2.0<br>© 2026 Yezi1-1
-    </div>
-  </div>
-
-  <!-- 底部Tab -->
-  <script>renderBottomTab("dashboard");</script>
 
   <script>
-  // ===== 初始化数据 =====
+    // 加载用户数据
+    const saveGoal = DB.get("saveGoal", 20000);
+    const saveCurrent = DB.get("saveCurrent", 8600);
+    const weightGoal = DB.get("weightGoal", 50);
+    const weightCurrent = DB.get("weightCurrent", 53.2);
+    const englishProgress = DB.get("englishGoal", 75);
 
-  // 财务记录
-  let financeRecords = DB.get("financeRecords", [
-    { desc:"训练营第3期·5人", amount:4995, type:"收入", track:"知识付费" },
-    { desc:"家居百货分销佣金", amount:2380, type:"收入", track:"电商带货" },
-    { desc:"剪辑软件年费", amount:599, type:"支出", track:"通用" },
-    { desc:"1v1咨询·2人", amount:6000, type:"收入", track:"知识付费" },
-    { desc:"小红书软文广告", amount:3000, type:"收入", track:"自媒体" },
-    { desc:"样品采购", amount:850, type:"支出", track:"电商带货" },
-  ]);
+    document.getElementById("save-goal-display").textContent = fmtMoney(saveGoal);
+    document.getElementById("save-current-display").textContent = fmtMoney(saveCurrent);
+    document.getElementById("weight-goal-display").textContent = weightGoal + "kg";
+    document.getElementById("weight-current-display").textContent = weightCurrent + "kg";
+    document.getElementById("english-progress").textContent = englishProgress + "%";
 
-  function renderFinance() {
-    const list = document.getElementById("finance-list");
-    if (!list) return;
-    list.innerHTML = "";
-    financeRecords.forEach((r, i) => {
-      const tagClass = {"收入":"tag-green","支出":"tag-red"}[r.type];
-      const trackClass = {"知识付费":"tag-purple","电商带货":"tag-blue","自媒体":"tag-orange","通用":"tag-gray"}[r.track];
-      list.innerHTML += `
-        <div class="list-item">
-          <div class="li-icon" style="background:${r.type==='收入'?'#e6f9f3':'#fdeaea'};">${r.type==='收入'?'💰':'💸'}</div>
-          <div class="li-content">
-            <div class="li-title">${r.desc}</div>
-            <div class="li-sub"><span class="tag ${tagClass}">${r.type}</span> <span class="tag ${trackClass}">${r.track}</span></div>
-          </div>
-          <div class="li-right" style="color:${r.type==='收入'?'var(--green)':'var(--red)'}">${r.type==='收入'?'+':'-'}¥${r.amount.toLocaleString()}</div>
-        </div>
-      `;
-    });
-  }
+    // 环形进度
+    setTimeout(() => {
+      drawRing("ring-save", (saveCurrent/saveGoal*100), "#7dc892", "#a8e6cf", "攒钱", fmtMoney(saveCurrent));
+      drawRing("ring-weight", Math.min((58-weightCurrent)/(58-weightGoal)*100, 100), "#ffb5ba", "#ffd6da", "减脂", weightCurrent+"kg");
+      drawRing("ring-english", englishProgress, "#a3d5f0", "#cce8f7", "英语", englishProgress+"%");
+    }, 100);
 
-  function addRecord() {
-    const desc = document.getElementById("fin-desc").value.trim();
-    const amount = Number(document.getElementById("fin-amount").value);
-    const type = document.getElementById("fin-type").value;
-    const track = document.getElementById("fin-track").value;
-    if (!desc || !amount) { alert("请填写说明和金额"); return; }
-    financeRecords.unshift({ desc, amount, type, track });
-    DB.set("financeRecords", financeRecords);
-    document.getElementById("fin-desc").value = "";
-    document.getElementById("fin-amount").value = "";
-    renderFinance();
-  }
-
-  // 客户数据
-  let customers = DB.get("customers", [
-    { name:"张明", source:"小红书", stage:"成交", track:"知识付费", amount:999 },
-    { name:"李婷", source:"抖音", stage:"意向", track:"电商带货", amount:0 },
-    { name:"王浩", source:"公众号", stage:"成交", track:"知识付费", amount:3000 },
-    { name:"陈雪", source:"转介绍", stage:"售后", track:"知识付费", amount:199 },
-    { name:"孙磊", source:"小红书", stage:"意向", track:"知识付费", amount:0 },
-    { name:"周敏", source:"抖音", stage:"成交", track:"电商带货", amount:1280 },
-  ]);
-
-  function renderCRM() {
-    const list = document.getElementById("crm-list");
-    if (!list) return;
-    list.innerHTML = "";
-    const stageMap = {"线索":{c:"tag-blue",i:"📋"},"意向":{c:"tag-orange",i:"💬"},"成交":{c:"tag-green",i:"✅"},"售后":{c:"tag-purple",i:"🌟"}};
-    const trackMap = {"知识付费":"tag-purple","电商带货":"tag-blue","自媒体":"tag-orange"};
-    customers.forEach((c, i) => {
-      const s = stageMap[c.stage];
-      list.innerHTML += `
-        <div class="list-item">
-          <div class="li-icon" style="background:var(--bg-input);">${s.i}</div>
-          <div class="li-content">
-            <div class="li-title">${c.name}</div>
-            <div class="li-sub"><span class="tag ${s.c}">${c.stage}</span> <span class="tag ${trackMap[c.track]}">${c.track}</span> · ${c.source}</div>
-          </div>
-          <div class="li-right" style="color:${c.amount?'var(--green)':'var(--text-muted)'}">${c.amount?'¥'+c.amount.toLocaleString():'—'}</div>
-        </div>
-      `;
-    });
-  }
-
-  function addCustomer() {
-    const name = document.getElementById("crm-name").value.trim();
-    if (!name) { alert("请输入客户姓名"); return; }
-    const source = document.getElementById("crm-source").value;
-    const stage = document.getElementById("crm-stage").value;
-    const track = document.getElementById("crm-track").value;
-    customers.unshift({ name, source, stage, track, amount:0 });
-    DB.set("customers", customers);
-    document.getElementById("crm-name").value = "";
-    renderCRM();
-  }
-
-  // 任务清单
-  const dailyTasks = DB.get("dailyTasks", [
-    { text:"发布小红书种草笔记 ×2", done:true, tag:"2/2" },
-    { text:"录制抖音知识短视频 ×1", done:true, tag:"1/1" },
-    { text:"跟进意向客户（李婷、孙磊）", done:true, tag:"2/2" },
-    { text:"训练营社群答疑互动", done:true, tag:"✓" },
-    { text:"回复评论和私信（>20条）", done:true, tag:"28/20" },
-    { text:"选品调研：3款新品分析", done:false, tag:"1/3" },
-    { text:"直播准备：脚本+选品排品", done:false, tag:"0%" },
-    { text:"明日内容规划与素材准备", done:false, tag:"—" },
-  ]);
-
-  const weeklyTasks = DB.get("weeklyTasks", [
-    { text:"训练营第3期招募满10人", done:true, tag:"12/10" },
-    { text:"发布B站长视频 ×2", done:true, tag:"2/2" },
-    { text:"完成1v1咨询交付 ×3", done:true, tag:"3/3" },
-    { text:"直播带货1场（GMV ¥8000）", done:false, tag:"筹备中" },
-    { text:"月度复盘报告输出", done:false, tag:"待7/31" },
-  ]);
-
-  const habits = DB.get("habits", [
-    { text:"早起（6:30前）", done:true },
-    { text:"运动30分钟", done:true },
-    { text:"学习1小时", done:true },
-    { text:"复盘日记", done:false },
-  ]);
-
-  function renderTasks(tasks, containerId, storageKey) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    container.innerHTML = "";
-    tasks.forEach((t, i) => {
-      container.innerHTML += `
-        <div class="task-item ${t.done?'done':''}" onclick="toggleTaskAndSave(this,'${storageKey}',${i})">
-          <div class="task-check"><span class="check-icon">✓</span></div>
-          <div class="task-text">${t.text}</div>
-          ${t.tag ? `<span class="task-tag">${t.tag}</span>` : ''}
-        </div>
-      `;
-    });
-  }
-
-  function toggleTaskAndSave(el, storageKey, idx) {
-    el.classList.toggle("done");
-    let arr;
-    if (storageKey === "dailyTasks") arr = dailyTasks;
-    else if (storageKey === "weeklyTasks") arr = weeklyTasks;
-    else arr = habits;
-    arr[idx].done = el.classList.contains("done");
-    DB.set(storageKey, arr);
-  }
-
-  // 热力图
-  function renderHeatmap() {
-    const hm = document.getElementById("heatmap");
-    if (!hm) return;
-    for (let i = 0; i < 60; i++) {
-      const cell = document.createElement("div");
-      cell.className = "heat-cell";
-      const r = Math.random();
-      if (r > 0.8) cell.classList.add("heat-4");
-      else if (r > 0.55) cell.classList.add("heat-3");
-      else if (r > 0.35) cell.classList.add("heat-2");
-      else if (r > 0.15) cell.classList.add("heat-1");
-      hm.appendChild(cell);
-    }
-  }
-
-  // ===== 初始化渲染 =====
-  renderFinance();
-  renderCRM();
-  renderTasks(dailyTasks, "task-list", "dailyTasks");
-  renderTasks(weeklyTasks, "weekly-list", "weeklyTasks");
-  renderTasks(habits, "habit-list", "habits");
-  renderHeatmap();
-
-  // 图表
-  setTimeout(() => {
-    drawLine("income-trend", ["1月","2月","3月","4月","5月","6月","7月"], [28000,35000,42000,38000,48000,51000,52300], "#6c5ce7", "#a29bfe");
-    drawBars("month-chart", ["1月","2月","3月","4月","5月","6月","7月"], [28000,35000,42000,38000,48000,51000,52300], "#6c5ce7", "#a29bfe");
-    drawRing("daily-ring", 62.5, ["#fd79a8","#e84393"], "今日完成");
-    drawLine("review-trend", ["2月","3月","4月","5月","6月","7月"], [35000,42000,38000,48000,51000,52300], "#6c5ce7", "#a29bfe");
-  }, 100);
+    // 热力图
+    renderHeatmap("week-heatmap", 7, [0,1,2,3,4,5,6]);
   </script>
 </body>
 </html>

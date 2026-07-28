@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>爆款捕捉 | 成长工作台</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .filter-tabs { display:flex; gap:8px; overflow-x:auto; margin-bottom:16px; padding-bottom:4px; }
+    .filter-tabs::-webkit-scrollbar { display:none; }
+    .ftab { padding:6px 14px; border-radius:20px; font-size:12px; white-space:nowrap; cursor:pointer; background:var(--white); border:1px solid var(--border); color:var(--text-secondary); }
+    .ftab.active { background:var(--grad-green); color:#fff; border:none; }
+    .video-card { background:var(--white); border-radius:var(--r-md); padding:16px; margin-bottom:12px; box-shadow:var(--shadow-card); }
+    .vc-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px; }
+    .vc-title { font-size:14px; font-weight:600; color:var(--text); flex:1; }
+    .vc-stats { display:flex; gap:12px; font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+    .vc-stat { display:flex; align-items:center; gap:3px; }
+    .vc-highlight { background:var(--yellow-soft); border-radius:8px; padding:10px; font-size:12px; color:var(--text-secondary); margin-bottom:8px; line-height:1.6; }
+    .vc-inspire { background:var(--green-soft); border-radius:8px; padding:10px; font-size:12px; color:var(--text-secondary); margin-bottom:8px; line-height:1.6; }
+    .vc-note { font-size:12px; color:var(--text-muted); border-top:1px dashed var(--border); padding-top:8px; }
+  </style>
+</head>
+<body>
+  <script src="assets/common.js"></script>
+  <script>renderSidebar("trending");</script>
+
+  <div class="main-content">
+    <div class="page-header">
+      <div class="page-title">✨ 爆款视频捕捉库</div>
+      <div class="page-subtitle">刷到爆款别划走，记录下来就是素材</div>
+    </div>
+
+    <!-- 今日统计 -->
+    <div class="card" style="background:var(--grad-yellow);color:#fff;border:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:12px;opacity:0.85;">今日采集</div>
+          <div style="font-size:32px;font-weight:700;">8 条 🎬</div>
+          <div style="font-size:12px;opacity:0.8;margin-top:4px;">本周累计 42 条 · 收藏 15 条</div>
+        </div>
+        <div style="font-size:48px;">📥</div>
+      </div>
+    </div>
+
+    <!-- 新增采集 -->
+    <div class="card">
+      <div class="card-title"><span class="title-icon">➕</span>新增爆款采集</div>
+      <div class="input-row">
+        <label>视频链接</label>
+        <input type="text" class="input" id="v-link" placeholder="粘贴视频链接">
+      </div>
+      <div class="input-row">
+        <label>视频标题</label>
+        <input type="text" class="input" id="v-title" placeholder="如：大学生一天吃什么">
+      </div>
+      <div class="grid-2">
+        <div class="input-row">
+          <label>点赞</label>
+          <input type="text" class="input" id="v-likes" placeholder="如 12.3w">
+        </div>
+        <div class="input-row">
+          <label>收藏</label>
+          <input type="text" class="input" id="v-saves" placeholder="如 8000">
+        </div>
+      </div>
+      <div class="input-row">
+        <label>赛道标签</label>
+        <select class="select" id="v-tag">
+          <option>大学生日常</option><option>美食探店</option><option>美妆护肤</option>
+          <option>学习vlog</option><option>穿搭</option><option>情感</option><option>知识科普</option><option>其他</option>
+        </select>
+      </div>
+      <div class="input-row">
+        <label>爆款亮点分析</label>
+        <textarea class="textarea" id="v-highlight" placeholder="为什么爆？开头Hook、节奏、选题角度..."></textarea>
+      </div>
+      <div class="input-row">
+        <label>可借鉴灵感</label>
+        <textarea class="textarea" id="v-inspire" placeholder="我能怎么用？改什么角度拍？"></textarea>
+      </div>
+      <div class="input-row">
+        <label>选题备注</label>
+        <input type="text" class="input" id="v-note" placeholder="补充想法...">
+      </div>
+      <button class="btn btn-green btn-full" onclick="addVideo()">📥 采集入库</button>
+    </div>
+
+    <!-- 分类筛选 -->
+    <div class="filter-tabs" id="filter-tabs">
+      <div class="ftab active" onclick="filterTag('全部',this)">全部</div>
+      <div class="ftab" onclick="filterTag('大学生日常',this)">大学生日常</div>
+      <div class="ftab" onclick="filterTag('美食探店',this)">美食探店</div>
+      <div class="ftab" onclick="filterTag('美妆护肤',this)">美妆护肤</div>
+      <div class="ftab" onclick="filterTag('学习vlog',this)">学习vlog</div>
+      <div class="ftab" onclick="filterTag('穿搭',this)">穿搭</div>
+    </div>
+
+    <!-- 采集台账 -->
+    <div class="section-label">📋 爆款采集台账</div>
+    <div id="video-list"></div>
+
+    <!-- 对标博主监控 -->
+    <div class="section-label">👀 对标博主监控</div>
+    <div class="card">
+      <div class="input-row">
+        <div class="grid-2">
+          <input type="text" class="input" id="b-name" placeholder="博主名">
+          <input type="text" class="input" id="b-platform" placeholder="平台 抖音/小红书">
+        </div>
+      </div>
+      <button class="btn btn-outline btn-full" onclick="addBlogger()">+ 添加监控博主</button>
+      <div id="blogger-list" class="mt-16"></div>
+    </div>
+
+    <!-- 每日热点话题 -->
+    <div class="section-label">🔥 每日热点话题</div>
+    <div class="card">
+      <div class="input-row">
+        <input type="text" class="input" id="topic-input" placeholder="记录今日热点话题...">
+      </div>
+      <div id="topic-list"></div>
+    </div>
+
+    <!-- 灵感选题收藏夹 -->
+    <div class="section-label">💡 灵感选题收藏夹</div>
+    <div class="card">
+      <div class="input-row">
+        <input type="text" class="input" id="idea-input" placeholder="突然想到的好选题...">
+      </div>
+      <div id="idea-list"></div>
+    </div>
+  </div>
+
+  <script>
+    // 爆款视频数据
+    let videos = DB.get("videos", [
+      { link:"https://...", title:"大学生100元挑战吃一周", likes:"23.5w", saves:"1.2w", tag:"大学生日常",
+        highlight:"开头直接亮出挑战结果，制造悬念；节奏快，每餐卡点剪辑；结尾有反转——省下的钱捐了",
+        inspire:"可以拍'大学生50元挑战一天三顿'，缩小范围增加可行性",
+        note:"评论区很多人求攻略，说明有需求" },
+      { link:"https://...", title:"宿舍自制神仙奶茶", likes:"8.9w", saves:"3.4w", tag:"美食探店",
+        highlight:"低成本+高颜值反差；步骤极简3步；背景音乐治愈",
+        inspire:"做一个'宿舍美食系列'，每周一期",
+        note:"原料都写清楚了，很适合跟做" },
+      { link:"https://...", title:"四级裸考过经验分享", likes:"15.2w", saves:"5.6w", tag:"学习vlog",
+        highlight:"标题有争议性'裸考'；干货密集；分段清晰有字幕",
+        inspire:"改造成'四级30天冲刺攻略'，更正能量",
+        note:"互动率很高" },
+    ]);
+
+    let currentFilter = "全部";
+
+    function renderVideos() {
+      const c = document.getElementById("video-list");
+      c.innerHTML = "";
+      const filtered = currentFilter === "全部" ? videos : videos.filter(v => v.tag === currentFilter);
+      if (filtered.length === 0) {
+        c.innerHTML = '<div class="card text-center text-muted">还没有采集过这个分类的爆款～</div>';
+        return;
+      }
+      filtered.forEach((v,i) => {
+        const tagCls = {"大学生日常":"tag-green","美食探店":"tag-orange","美妆护肤":"tag-pink","学习vlog":"tag-blue","穿搭":"tag-yellow"}[v.tag] || "tag-gray";
+        c.innerHTML += `
+          <div class="video-card">
+            <div class="vc-header">
+              <div class="vc-title">${v.title}</div>
+              <span class="tag ${tagCls}">${v.tag}</span>
+            </div>
+            <div class="vc-stats">
+              <div class="vc-stat">❤️ ${v.likes}</div>
+              <div class="vc-stat">⭐ ${v.saves}</div>
+              <div class="vc-stat">🔗 <a href="${v.link}" target="_blank" style="color:var(--text-muted);text-decoration:none;">原视频</a></div>
+            </div>
+            ${v.highlight ? `<div class="vc-highlight">💡 <b>亮点分析：</b>${v.highlight}</div>` : ""}
+            ${v.inspire ? `<div class="vc-inspire">✨ <b>可借鉴：</b>${v.inspire}</div>` : ""}
+            ${v.note ? `<div class="vc-note">📝 ${v.note}</div>` : ""}
+          </div>`;
+      });
+    }
+
+    function filterTag(tag, el) {
+      currentFilter = tag;
+      document.querySelectorAll(".ftab").forEach(t => t.classList.remove("active"));
+      el.classList.add("active");
+      renderVideos();
+    }
+
+    function addVideo() {
+      const v = {
+        link: document.getElementById("v-link").value.trim() || "#",
+        title: document.getElementById("v-title").value.trim(),
+        likes: document.getElementById("v-likes").value.trim() || "—",
+        saves: document.getElementById("v-saves").value.trim() || "—",
+        tag: document.getElementById("v-tag").value,
+        highlight: document.getElementById("v-highlight").value.trim(),
+        inspire: document.getElementById("v-inspire").value.trim(),
+        note: document.getElementById("v-note").value.trim(),
+      };
+      if (!v.title) { alert("填写视频标题～"); return; }
+      videos.unshift(v);
+      DB.set("videos", videos);
+      ["v-link","v-title","v-likes","v-saves","v-highlight","v-inspire","v-note"].forEach(id => document.getElementById(id).value = "");
+      renderVideos();
+    }
+
+    renderVideos();
+
+    // 对标博主
+    let bloggers = DB.get("bloggers", [
+      { name:"某学长", platform:"抖音", fans:"120w", note:"大学生日常赛道" },
+      { name:"宿舍美食家小C", platform:"小红书", fans:"56w", note:"宿舍美食系列" },
+    ]);
+    function renderBloggers() {
+      const c = document.getElementById("blogger-list");
+      c.innerHTML = "";
+      bloggers.forEach((b,i) => {
+        c.innerHTML += `
+          <div class="list-item">
+            <div class="li-icon" style="background:var(--green-light);">👀</div>
+            <div class="li-content"><div class="li-title">${b.name}</div><div class="li-sub">${b.platform} · ${b.fans}粉 · ${b.note}</div></div>
+            <div class="li-right text-muted">监控中</div>
+          </div>`;
+      });
+    }
+    function addBlogger() {
+      const name = document.getElementById("b-name").value.trim();
+      const platform = document.getElementById("b-platform").value.trim();
+      if (!name) { alert("填写博主名～"); return; }
+      bloggers.unshift({ name, platform:platform||"抖音", fans:"—", note:"新增监控" });
+      DB.set("bloggers", bloggers);
+      document.getElementById("b-name").value = "";
+      document.getElementById("b-platform").value = "";
+      renderBloggers();
+    }
+    renderBloggers();
+
+    // 热点话题
+    let topics = DB.get("topics", [
+      { text:"#大学生特种兵旅游", done:false },
+      { text:"#宿舍改造大赛", done:true },
+    ]);
+    function renderTopics() {
+      const c = document.getElementById("topic-list");
+      c.innerHTML = "";
+      topics.forEach((t,i) => {
+        c.innerHTML += `
+          <div class="task-item ${t.done?'done':''}" onclick="toggleTopic(${i})">
+            <div class="task-check"><span class="check">✓</span></div>
+            <div class="task-text">${t.text}</div>
+          </div>`;
+      });
+    }
+    function toggleTopic(i) { topics[i].done = !topics[i].done; DB.set("topics", topics); renderTopics(); }
+    document.getElementById("topic-input").addEventListener("keypress", e => {
+      if (e.key === "Enter" && e.target.value.trim()) {
+        topics.unshift({ text:e.target.value.trim(), done:false });
+        DB.set("topics", topics); e.target.value=""; renderTopics();
+      }
+    });
+    renderTopics();
+
+    // 灵感选题
+    let ideas = DB.get("ideas", [
+      { text:"大学生一周食堂测评", done:false },
+      { text:"宿舍平价好物分享Top10", done:false },
+      { text:"四级倒计时30天打卡", done:true },
+    ]);
+    function renderIdeas() {
+      const c = document.getElementById("idea-list");
+      c.innerHTML = "";
+      ideas.forEach((t,i) => {
+        c.innerHTML += `
+          <div class="task-item ${t.done?'done':''}" onclick="toggleIdea(${i})">
+            <div class="task-check"><span class="check">✓</span></div>
+            <div class="task-text">💡 ${t.text}</div>
+          </div>`;
+      });
+    }
+    function toggleIdea(i) { ideas[i].done = !ideas[i].done; DB.set("ideas", ideas); renderIdeas(); }
+    document.getElementById("idea-input").addEventListener("keypress", e => {
+      if (e.key === "Enter" && e.target.value.trim()) {
+        ideas.unshift({ text:e.target.value.trim(), done:false });
+        DB.set("ideas", ideas); e.target.value=""; renderIdeas();
+      }
+    });
+    renderIdeas();
+  </script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>每日打卡 | 成长工作台</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <script src="assets/common.js"></script>
+  <script>renderSidebar("daily");</script>
+
+  <div class="main-content">
+    <div class="page-header">
+      <div class="page-title">✅ 每日任务打卡</div>
+      <div class="page-subtitle" id="daily-date">今天是 · 完成今日四件事</div>
+    </div>
+
+    <!-- 今日进度 -->
+    <div class="card" style="background:var(--grad-green);color:#fff;border:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:12px;opacity:0.85;">今日完成度</div>
+          <div style="font-size:32px;font-weight:700;" id="daily-progress">0/12</div>
+          <div style="font-size:12px;opacity:0.8;margin-top:4px;">连续打卡 23 天 🔥</div>
+        </div>
+        <div style="font-size:48px;">🌿</div>
+      </div>
+    </div>
+
+    <!-- 存钱自律 -->
+    <div class="section-label">💰 存钱自律</div>
+    <div class="card">
+      <div id="money-tasks"></div>
+    </div>
+
+    <!-- 减脂运动 -->
+    <div class="section-label">🌸 减脂运动</div>
+    <div class="card">
+      <div id="fitness-tasks"></div>
+    </div>
+
+    <!-- 英语学习 -->
+    <div class="section-label">📖 英语学习</div>
+    <div class="card">
+      <div id="english-tasks"></div>
+    </div>
+
+    <!-- 刷爆款找灵感 -->
+    <div class="section-label">✨ 刷爆款找灵感</div>
+    <div class="card">
+      <div id="trending-tasks"></div>
+    </div>
+
+    <!-- 每日复盘 -->
+    <div class="section-label">📝 每日简短复盘</div>
+    <div class="card">
+      <div class="input-row">
+        <label>今天做得好的 🌟</label>
+        <textarea class="textarea" id="review-good" placeholder="哪怕一点点小事也值得记录..." onchange="saveReview()">今天坚持早起去食堂吃早餐了，没有点外卖～</textarea>
+      </div>
+      <div class="input-row">
+        <label>明天可以更好的 💪</label>
+        <textarea class="textarea" id="review-better" placeholder="写下明天想改进的一件小事..." onchange="saveReview()">下午图书馆时间少了点，明天多待1小时</textarea>
+      </div>
+      <div class="input-row">
+        <label>今日心情 😊</label>
+        <div style="display:flex;gap:8px;" id="mood-picker">
+          <button class="btn btn-outline" style="flex:1;padding:8px;" onclick="pickMood('😊',this)">😊 开心</button>
+          <button class="btn btn-outline" style="flex:1;padding:8px;" onclick="pickMood('😌',this)">😌 平静</button>
+          <button class="btn btn-outline" style="flex:1;padding:8px;" onclick="pickMood('😴',this)">😴 疲惫</button>
+          <button class="btn btn-outline" style="flex:1;padding:8px;" onclick="pickMood('🥺',this)">🥺 低落</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 一句话 -->
+    <div class="card" style="text-align:center;background:var(--green-soft);">
+      <div style="font-size:14px;color:var(--green-deep);font-weight:600;">"每一个不起眼的小坚持<br>都会在未来的某一天<br>突然让你看到意义 🌱"</div>
+    </div>
+  </div>
+
+  <script>
+    // 日期
+    const now = new Date();
+    const weekdays = ["日","一","二","三","四","五","六"];
+    document.getElementById("daily-date").textContent = `今天是 ${now.getMonth()+1}月${now.getDate()}日 星期${weekdays[now.getDay()]} · 完成今日四件事`;
+
+    // 任务数据
+    const taskData = {
+      moneyTasks: [
+        { text:"今日记账（记每一笔）", done:true },
+        { text:"检查今日消费是否超预算", done:true },
+        { text:"存入今日攒钱金额", done:false },
+      ],
+      fitnessTasks: [
+        { text:"记录今日体重", done:true },
+        { text:"三餐饮食打卡", done:true },
+        { text:"完成运动清单", done:false },
+        { text:"热量记录", done:false },
+      ],
+      englishTasks: [
+        { text:"背单词 80个", done:true },
+        { text:"听力/阅读 30分钟", done:false },
+        { text:"口语练习 15分钟", done:false },
+      ],
+      trendingTasks: [
+        { text:"刷爆款视频并采集 8条", done:true },
+        { text:"记录1条灵感选题", done:false },
+        { text:"查看对标博主更新", done:false },
+      ],
+    };
+
+    // 保存任务状态
+    Object.keys(taskData).forEach(key => {
+      const saved = DB.get(key);
+      if (saved) taskData[key] = saved;
+    });
+
+    function renderTasks(key, containerId) {
+      const c = document.getElementById(containerId);
+      c.innerHTML = "";
+      taskData[key].forEach((t,i) => {
+        c.innerHTML += `
+          <div class="task-item ${t.done?'done':''}" onclick="toggleDaily('${key}',${i},this)">
+            <div class="task-check"><span class="check">✓</span></div>
+            <div class="task-text">${t.text}</div>
+          </div>`;
+      });
+      updateProgress();
+    }
+
+    function toggleDaily(key, idx, el) {
+      el.classList.toggle("done");
+      taskData[key][idx].done = el.classList.contains("done");
+      DB.set(key, taskData[key]);
+      updateProgress();
+    }
+
+    function updateProgress() {
+      let total = 0, done = 0;
+      Object.values(taskData).forEach(arr => {
+        total += arr.length;
+        done += arr.filter(t => t.done).length;
+      });
+      document.getElementById("daily-progress").textContent = `${done}/${total}`;
+    }
+
+    renderTasks("moneyTasks", "money-tasks");
+    renderTasks("fitnessTasks", "fitness-tasks");
+    renderTasks("englishTasks", "english-tasks");
+    renderTasks("trendingTasks", "trending-tasks");
+
+    // 复盘保存
+    const reviewGood = DB.get("reviewGood", "");
+    const reviewBetter = DB.get("reviewBetter", "");
+    if (reviewGood) document.getElementById("review-good").value = reviewGood;
+    if (reviewBetter) document.getElementById("review-better").value = reviewBetter;
+
+    function saveReview() {
+      DB.set("reviewGood", document.getElementById("review-good").value);
+      DB.set("reviewBetter", document.getElementById("review-better").value);
+    }
+
+    function pickMood(mood, el) {
+      document.querySelectorAll("#mood-picker .btn").forEach(b => {
+        b.classList.remove("btn-green");
+        b.classList.add("btn-outline");
+      });
+      el.classList.add("btn-green");
+      el.classList.remove("btn-outline");
+      DB.set("todayMood", mood);
+    }
+    const savedMood = DB.get("todayMood", "😊");
+    document.querySelectorAll("#mood-picker .btn").forEach(b => {
+      if (b.textContent.includes(savedMood)) { b.classList.add("btn-green"); b.classList.remove("btn-outline"); }
+    });
+  </script>
+</body>
+</html>
